@@ -30,12 +30,22 @@ export function useAuth() {
     return { error }
   }
 
+  // Send magic link to partner as invitation
+  const sendPartnerInvite = async (partnerEmail) => {
+    const redirectUrl = window.location.origin
+    const { error } = await supabase.auth.signInWithOtp({
+      email: partnerEmail,
+      options: { emailRedirectTo: redirectUrl },
+    })
+    return { error }
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
     setSession(null)
   }
 
-  return { session, loading, signInWithEmail, signOut }
+  return { session, loading, signInWithEmail, signOut, sendPartnerInvite }
 }
 
 export function useChallenge(session) {
@@ -166,6 +176,16 @@ export function useChallenge(session) {
     }
   }
 
+  // Delete challenge (start fresh)
+  const deleteChallenge = async () => {
+    if (!challenge) return
+    await supabase
+      .from('challenges')
+      .delete()
+      .eq('id', challenge.id)
+    setChallenge(null)
+  }
+
   return {
     challenge,
     loading,
@@ -174,6 +194,7 @@ export function useChallenge(session) {
     createChallenge,
     toggleDay,
     updateGoal,
+    deleteChallenge,
     reload: loadChallenge,
   }
 }
