@@ -106,17 +106,18 @@ const menuItemStyle = {
 }
 
 /* ───────── Login Screen ───────── */
-function LoginScreen({ onLogin, loading: authLoading, lang, setLang }) {
+function LoginScreen({ onGoogleLogin, onEmailLogin, loading: authLoading, lang, setLang }) {
   const t = getTranslations(lang)
+  const [showEmail, setShowEmail] = useState(false)
   const [email, setEmail] = useState('')
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async () => {
+  const handleEmailSubmit = async () => {
     if (!email.includes('@')) { setError(t.invalidEmail); return }
     setLoading(true); setError('')
-    const { error: err } = await onLogin(email)
+    const { error: err } = await onEmailLogin(email)
     setLoading(false)
     if (err) setError(err.message)
     else setSent(true)
@@ -174,23 +175,63 @@ function LoginScreen({ onLogin, loading: authLoading, lang, setLang }) {
             <p style={{ fontSize: 16, color: '#888', marginBottom: 18, textAlign: 'center', fontWeight: 500 }}>
               {t.loginPrompt}
             </p>
-            <input
-              type="email" placeholder={t.emailPlaceholder} value={email}
-              onChange={e => setEmail(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleSubmit()}
-              style={styles.input}
-            />
-            {error && <p style={{ color: '#c00', fontSize: 14, fontWeight: 700, margin: '10px 0 0' }}>{error}</p>}
+
+            {/* Google Login - primary */}
             <button
-              onClick={handleSubmit} disabled={loading}
-              style={{ ...styles.primaryBtn, marginTop: 14, opacity: loading ? 0.6 : 1 }}
+              onClick={onGoogleLogin}
+              style={{
+                width: '100%', padding: '14px', borderRadius: 0,
+                border: '2px solid #222', cursor: 'pointer',
+                background: '#fff', color: '#222', fontSize: 18, fontWeight: 700,
+                fontFamily: "'Gaegu', sans-serif", transition: 'all 0.2s',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+              }}
             >
-              {loading ? t.sending : t.sendLink}
+              <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+              {t.googleLogin}
             </button>
+
+            {/* Divider */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 12, margin: '18px 0',
+            }}>
+              <div style={{ flex: 1, height: 1, background: '#ddd' }} />
+              <span style={{ fontSize: 13, color: '#aaa', fontWeight: 700 }}>{t.orEmail}</span>
+              <div style={{ flex: 1, height: 1, background: '#ddd' }} />
+            </div>
+
+            {/* Email login - secondary */}
+            {!showEmail ? (
+              <button
+                onClick={() => setShowEmail(true)}
+                style={{
+                  width: '100%', padding: '12px', borderRadius: 0,
+                  border: '1.5px dashed #bbb', cursor: 'pointer',
+                  background: '#fafafa', color: '#666', fontSize: 15, fontWeight: 700,
+                  fontFamily: "'Gaegu', sans-serif",
+                }}
+              >
+                {t.sendLink}
+              </button>
+            ) : (
+              <>
+                <input
+                  type="email" placeholder={t.emailPlaceholder} value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleEmailSubmit()}
+                  style={styles.input}
+                  autoFocus
+                />
+                {error && <p style={{ color: '#c00', fontSize: 14, fontWeight: 700, margin: '10px 0 0' }}>{error}</p>}
+                <button
+                  onClick={handleEmailSubmit} disabled={loading}
+                  style={{ ...styles.primaryBtn, marginTop: 10, opacity: loading ? 0.6 : 1 }}
+                >
+                  {loading ? t.sending : t.sendLink}
+                </button>
+              </>
+            )}
           </div>
-          <p style={{ color: '#bbb', fontSize: 13, fontWeight: 500, marginTop: 16, textAlign: 'center' }}>
-            {t.noAccount}
-          </p>
         </div>
       </div>
     </div>
@@ -198,15 +239,15 @@ function LoginScreen({ onLogin, loading: authLoading, lang, setLang }) {
 }
 
 /* ───────── Setup Screen ───────── */
-function SetupScreen({ myEmail, onCreate, onSendInvite, lang, setLang, onSignOut }) {
+function SetupScreen({ myEmail, onCreate, lang, setLang, onSignOut }) {
   const t = getTranslations(lang)
   const [partnerName, setPartnerName] = useState('')
   const [partnerEmail, setPartnerEmail] = useState('')
   const [myName, setMyName] = useState('')
   const [loading, setLoading] = useState(false)
-  const [inviteSent, setInviteSent] = useState(false)
-  const [inviteError, setInviteError] = useState(false)
+  const [created, setCreated] = useState(false)
   const [sentEmail, setSentEmail] = useState('')
+  const [copied, setCopied] = useState(false)
 
   const canStart = myName.trim() && partnerName.trim() && partnerEmail.includes('@')
 
@@ -217,44 +258,55 @@ function SetupScreen({ myEmail, onCreate, onSendInvite, lang, setLang, onSignOut
       name2: partnerName.trim(), email2: partnerEmail.trim(),
     })
     if (challenge) {
-      const { error } = await onSendInvite(partnerEmail.trim())
       setSentEmail(partnerEmail.trim())
-      if (error) setInviteError(true)
-      setInviteSent(true)
+      setCreated(true)
     }
     setLoading(false)
   }
 
-  if (inviteSent) {
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.origin)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  if (created) {
     return (
       <div style={styles.page}>
         <TopBar lang={lang} setLang={setLang} onSignOut={onSignOut} t={t} showActions={false} />
         <div style={styles.centered}>
           <div style={{ maxWidth: 420, width: '100%', textAlign: 'center' }}>
-            <div style={{ fontSize: 52, marginBottom: 16 }}>✉️</div>
+            <div style={{ fontSize: 52, marginBottom: 16 }}>🎉</div>
             <h2 style={{ fontSize: 28, fontWeight: 700, color: '#222', margin: '0 0 14px' }}>
-              {t.inviteSent}
+              {t.challengeCreated}
             </h2>
             <p style={{ color: '#444', fontSize: 18, lineHeight: 1.6, fontWeight: 500 }}>
-              {t.inviteSentTo(sentEmail)}
+              {t.partnerInstructions(sentEmail)}
             </p>
-            <p style={{ color: '#777', fontSize: 15, lineHeight: 1.5, marginTop: 8, fontWeight: 500 }}>
-              {t.inviteSentDesc}
+
+            {/* Copy link button */}
+            <button
+              onClick={handleCopyLink}
+              style={{
+                margin: '16px auto', padding: '12px 24px', borderRadius: 0,
+                border: '2px solid #222', cursor: 'pointer',
+                background: copied ? '#222' : '#fff',
+                color: copied ? '#fff' : '#222',
+                fontSize: 16, fontWeight: 700,
+                fontFamily: "'Gaegu', sans-serif", transition: 'all 0.2s',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              }}
+            >
+              {copied ? '✓ ' : '📋 '}{copied ? t.linkCopied : t.copyLink}
+            </button>
+
+            <p style={{ color: '#777', fontSize: 15, lineHeight: 1.5, marginTop: 12, fontWeight: 500 }}>
+              {t.partnerInstructionsDesc}
             </p>
-            {inviteError && (
-              <p style={{
-                color: '#c00', fontSize: 14, fontWeight: 700, marginTop: 12,
-                border: '1.5px dashed #c00', padding: '10px 14px',
-              }}>
-                {t.inviteFailed}
-              </p>
-            )}
-            <p style={{ color: '#aaa', fontSize: 14, fontWeight: 500, marginTop: 20 }}>
-              {t.inviteSentWaiting}
-            </p>
+
             <button
               onClick={() => window.location.reload()}
-              style={{ ...styles.primaryBtn, marginTop: 16, maxWidth: 300, margin: '16px auto 0' }}
+              style={{ ...styles.primaryBtn, marginTop: 20, maxWidth: 300, margin: '20px auto 0' }}
             >
               {t.goToChallenge}
             </button>
@@ -440,7 +492,7 @@ export default function App() {
   const [lang, setLang] = useState(() => localStorage.getItem('challenge-lang') || 'ko')
   useEffect(() => { localStorage.setItem('challenge-lang', lang) }, [lang])
 
-  const { session, loading: authLoading, signInWithEmail, signOut, sendPartnerInvite } = useAuth()
+  const { session, loading: authLoading, signInWithGoogle, signInWithEmail, signOut } = useAuth()
   const { challenge, loading: challengeLoading, mySide, createChallenge, toggleDay, updateGoal, deleteChallenge } = useChallenge(session)
 
   const handleNewChallenge = async () => {
@@ -448,7 +500,7 @@ export default function App() {
   }
 
   if (!session) {
-    return <LoginScreen onLogin={signInWithEmail} loading={authLoading} lang={lang} setLang={setLang} />
+    return <LoginScreen onGoogleLogin={signInWithGoogle} onEmailLogin={signInWithEmail} loading={authLoading} lang={lang} setLang={setLang} />
   }
 
   if (challengeLoading) {
@@ -467,8 +519,7 @@ export default function App() {
     return (
       <SetupScreen
         myEmail={session.user.email} onCreate={createChallenge}
-        onSendInvite={sendPartnerInvite} onSignOut={signOut}
-        lang={lang} setLang={setLang}
+        onSignOut={signOut} lang={lang} setLang={setLang}
       />
     )
   }

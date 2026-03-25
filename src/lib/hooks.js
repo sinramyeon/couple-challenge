@@ -21,20 +21,18 @@ export function useAuth() {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signInWithEmail = async (email) => {
-    const redirectUrl = window.location.origin
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: redirectUrl },
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
     })
     return { error }
   }
 
-  // Send magic link to partner as invitation
-  const sendPartnerInvite = async (partnerEmail) => {
+  const signInWithEmail = async (email) => {
     const redirectUrl = window.location.origin
     const { error } = await supabase.auth.signInWithOtp({
-      email: partnerEmail,
+      email,
       options: { emailRedirectTo: redirectUrl },
     })
     return { error }
@@ -45,7 +43,7 @@ export function useAuth() {
     setSession(null)
   }
 
-  return { session, loading, signInWithEmail, signOut, sendPartnerInvite }
+  return { session, loading, signInWithGoogle, signInWithEmail, signOut }
 }
 
 export function useChallenge(session) {
