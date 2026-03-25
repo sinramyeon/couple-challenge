@@ -7,47 +7,46 @@ export const PASTEL_FILLS = [
   "#F5D5E8","#D5F5F0","#F0D5F5","#E0F5D5","#F5D5D5",
 ]
 
+/*
+  30 unique crayon colors — arranged so adjacent bears
+  never share the same hue. Palette covers full spectrum:
+  reds, corals, oranges, yellows, greens, teals, blues,
+  purples, pinks — all vivid & cheerful.
+*/
 export const CRAYON_COLORS = [
-  "#C4A0E0","#87BEE0","#E0A087","#87E0A0","#E0D587",
-  "#E087BE","#87E0D5","#D587E0","#A0E087","#E08787",
-  "#87A0E0","#BEE087","#E087D5","#87E0BE","#D5E087",
-  "#E0BE87","#87D5E0","#A087E0","#E087A0","#87E087",
-  "#C4A0E0","#87BEE0","#E0A087","#87E0A0","#E0D587",
-  "#E087BE","#87E0D5","#D587E0","#A0E087","#E08787",
+  "#FF6B6B", // warm red
+  "#45B7D1", // ocean blue
+  "#FFD93D", // sunny yellow
+  "#6BCB77", // leaf green
+  "#C882E8", // soft violet
+  "#FF8C42", // tangerine
+  "#4DD0E1", // turquoise
+  "#FF5E97", // rose pink
+  "#A0E548", // lime green
+  "#7C83FF", // periwinkle
+  "#FFB347", // apricot
+  "#26C6DA", // cyan
+  "#FF4F6F", // raspberry
+  "#66DE93", // mint
+  "#B56CFF", // amethyst
+  "#FF7043", // burnt orange
+  "#40C9C9", // teal
+  "#FFCF48", // golden
+  "#E85D9A", // fuchsia
+  "#5CC2A0", // jade
+  "#F0635A", // tomato red
+  "#5DA4E8", // sky blue
+  "#FFE156", // lemon
+  "#82D965", // spring green
+  "#D47CDB", // orchid
+  "#FF9654", // melon
+  "#3DC1C1", // seafoam
+  "#FF72A0", // bubblegum
+  "#8BE870", // grass
+  "#8F7CFF", // lavender blue
 ]
 
 export const THEMES = {
-  a: { color: "#C4A0E0", light: "#f0e8f8", dark: "#8B6AAE", border: "#e8ddf0" },
-  b: { color: "#87BEE0", light: "#e0f0f8", dark: "#5A8AAE", border: "#d5e0f0" },
-}
-
-export const EMOJIS = { a: "🐰", b: "🐻" }
-
-const ENCOURAGEMENTS = [
-  { gap: 3, msgs: [
-    "조금 뒤처졌지만 괜찮아! 오늘부터 다시 🔥",
-    "아직 충분히 따라잡을 수 있어! 힘내 💪",
-    "천천히 가도 괜찮아, 포기만 하지 말자 🌿",
-  ]},
-  { gap: 7, msgs: [
-    "많이 벌어졌네... 하지만 지금 시작하면 돼! 🏃",
-    "상대가 열심히 하고 있어! 자극 받아볼까? ⚡",
-    "7일 차이는 일주일이면 따라잡아! 화이팅 🎯",
-  ]},
-  { gap: 12, msgs: [
-    "많이 밀렸지만, 포기하지 마! 지금이 가장 빠른 때야 🌅",
-    "상대방도 너를 응원하고 있을 거야! 같이 가자 🤝",
-  ]},
-]
-
-export function getEncouragement(myCount, theirCount) {
-  const gap = theirCount - myCount
-  if (gap < 3) return null
-  for (let i = ENCOURAGEMENTS.length - 1; i >= 0; i--) {
-    if (gap >= ENCOURAGEMENTS[i].gap) {
-      const msgs = ENCOURAGEMENTS[i].msgs
-      return msgs[Math.floor(Math.random() * msgs.length)]
-    }
-  }
-  return null
+  a: { color: '#333', dark: '#111', light: '#f5f5f5', border: '#ddd' },
+  b: { color: '#333', dark: '#111', light: '#f5f5f5', border: '#ddd' },
 }

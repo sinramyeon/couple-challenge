@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-export default function EditableGoal({ goal, onSave, themeColor, isOwner }) {
+export default function EditableGoal({ goal, onSave, isOwner, t }) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(goal || '')
   const inputRef = useRef(null)
@@ -8,20 +8,24 @@ export default function EditableGoal({ goal, onSave, themeColor, isOwner }) {
   useEffect(() => { setDraft(goal || '') }, [goal])
   useEffect(() => { if (editing && inputRef.current) inputRef.current.focus() }, [editing])
 
+  const baseStyle = {
+    background: '#fafafa', borderRadius: 0,
+    padding: '14px 16px', marginBottom: 16, fontSize: 20,
+    display: 'flex', alignItems: 'center', gap: 10,
+    border: '1.5px dashed #ccc',
+    minHeight: 54,
+  }
+
   if (!isOwner) {
     return (
-      <div style={{
-        background: themeColor.light + '44', borderRadius: 12,
-        padding: '10px 14px', marginBottom: 16, fontSize: 14,
-        display: 'flex', alignItems: 'center', gap: 8,
-      }}>
-        <span style={{ fontSize: 13 }}>🎯</span>
+      <div style={baseStyle}>
         <span style={{
-          fontWeight: 500,
-          color: goal ? '#555' : '#bbb',
+          fontWeight: 700,
+          color: goal ? '#333' : '#bbb',
           fontStyle: goal ? 'normal' : 'italic',
+          fontSize: goal ? 20 : 16,
         }}>
-          {goal || '아직 목표를 설정하지 않았어요'}
+          {goal || t.noGoalYet}
         </span>
       </div>
     )
@@ -29,13 +33,7 @@ export default function EditableGoal({ goal, onSave, themeColor, isOwner }) {
 
   if (editing) {
     return (
-      <div style={{
-        background: themeColor.light + '66', borderRadius: 12,
-        padding: '8px 10px', marginBottom: 16,
-        display: 'flex', alignItems: 'center', gap: 8,
-        border: `1.5px solid ${themeColor.color}44`,
-      }}>
-        <span style={{ fontSize: 13 }}>🎯</span>
+      <div style={{ ...baseStyle, border: '2px solid #222' }}>
         <input
           ref={inputRef} type="text" value={draft}
           onChange={e => setDraft(e.target.value)}
@@ -44,23 +42,23 @@ export default function EditableGoal({ goal, onSave, themeColor, isOwner }) {
             if (e.key === 'Escape') { setDraft(goal || ''); setEditing(false) }
           }}
           onBlur={() => { onSave(draft); setEditing(false) }}
-          placeholder="30일 목표를 적어보세요..."
+          placeholder={t.goalPlaceholder}
           style={{
             flex: 1, border: 'none', background: 'transparent',
-            fontSize: 14, outline: 'none', color: '#555', fontWeight: 500,
-            fontFamily: "'Pretendard Variable', sans-serif",
+            fontSize: 20, outline: 'none', color: '#222', fontWeight: 700,
+            fontFamily: "'Gaegu', sans-serif",
           }}
         />
         <button
           onClick={() => { onSave(draft); setEditing(false) }}
           style={{
-            background: themeColor.color, color: '#fff', border: 'none',
-            borderRadius: 8, padding: '4px 12px', fontSize: 12,
-            fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap',
-            fontFamily: "'Pretendard Variable', sans-serif",
+            background: '#222', color: '#fff', border: 'none',
+            borderRadius: 2, padding: '5px 14px', fontSize: 14,
+            fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
+            fontFamily: "'Gaegu', sans-serif",
           }}
         >
-          저장
+          {t.save}
         </button>
       </div>
     )
@@ -69,20 +67,14 @@ export default function EditableGoal({ goal, onSave, themeColor, isOwner }) {
   return (
     <div
       onClick={() => setEditing(true)}
-      style={{
-        background: themeColor.light + '44', borderRadius: 12,
-        padding: '10px 14px', marginBottom: 16, fontSize: 14,
-        display: 'flex', alignItems: 'center', gap: 8,
-        cursor: 'pointer', transition: 'all 0.2s',
-      }}
-      onMouseEnter={e => e.currentTarget.style.background = themeColor.light + '88'}
-      onMouseLeave={e => e.currentTarget.style.background = themeColor.light + '44'}
+      style={{ ...baseStyle, cursor: 'pointer', transition: 'border-color 0.2s' }}
+      onMouseEnter={e => e.currentTarget.style.borderColor = '#888'}
+      onMouseLeave={e => e.currentTarget.style.borderColor = '#ccc'}
     >
-      <span style={{ fontSize: 13 }}>🎯</span>
-      <span style={{ fontWeight: 500, color: goal ? '#555' : '#bbb', flex: 1 }}>
-        {goal || '목표를 설정해주세요...'}
+      <span style={{ fontWeight: 700, color: goal ? '#333' : '#bbb', flex: 1, fontSize: goal ? 20 : 16 }}>
+        {goal || t.setGoal}
       </span>
-      <span style={{ fontSize: 11, color: '#ccc' }}>✏️</span>
+      <span style={{ fontSize: 16, color: '#bbb' }}>✏️</span>
     </div>
   )
 }

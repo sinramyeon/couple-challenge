@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 480" fill="none">
+  <!-- Left ear (donut shape) -->
+  <path d="M138 95 C138 60, 105 38, 80 50 C55 62, 48 95, 65 115 C75 128, 95 132, 112 125"
+    stroke="#222" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <ellipse cx="90" cy="85" rx="16" ry="18" stroke="#222" stroke-width="10" fill="none"/>
+
+  <!-- Right ear (donut shape) -->
+  <path d="M362 95 C362 60, 395 38, 420 50 C445 62, 452 95, 435 115 C425 128, 405 132, 388 125"
+    stroke="#222" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <ellipse cx="410" cy="85" rx="16" ry="18" stroke="#222" stroke-width="10" fill="none"/>
+
+  <!-- Head - chubby egg shape, wider at bottom, hand-drawn feel -->
+  <path d="M110 140
+    C80 170, 42 220, 40 275
+    C38 320, 52 365, 85 395
+    C120 428, 170 452, 250 455
+    C330 452, 380 428, 415 395
+    C448 365, 462 320, 460 275
+    C458 220, 420 170, 390 140
+    C360 110, 310 95, 250 93
+    C190 95, 140 110, 110 140 Z"
+    stroke="#222" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="white"/>
+
+  <!-- Left eye -->
+  <ellipse cx="190" cy="240" rx="16" ry="18" fill="#222"/>
+
+  <!-- Right eye -->
+  <ellipse cx="310" cy="240" rx="16" ry="18" fill="#222"/>
+
+  <!-- Nose - rounded blob -->
+  <path d="M235 310 C235 290, 250 280, 260 285 C270 280, 285 290, 280 310
+    C280 325, 265 335, 258 330 C250 335, 235 325, 235 310 Z"
+    fill="#222"/>
+
+  <!-- Mouth - w shape -->
+  <path d="M225 340 C230 355, 245 365, 257 350 C270 365, 285 355, 290 340"
+    stroke="#222" stroke-width="8" stroke-linecap="round" fill="none"/>
+</svg>

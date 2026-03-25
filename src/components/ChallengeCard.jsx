@@ -1,56 +1,95 @@
-import CrayonCircle from './CrayonCircle'
+import { useState, useEffect, useRef } from 'react'
+import BearCircle from './BearCircle'
 import EditableGoal from './EditableGoal'
-import BunnyFace from './BunnyFace'
+import ProgressBar from './ProgressBar'
+import AchievementBadges from './AchievementBadges'
+import { CRAYON_COLORS } from '../lib/constants'
+
+function getLongestStreak(days) {
+  let max = 0, cur = 0
+  for (const d of days) {
+    if (d) { cur++; max = Math.max(max, cur) }
+    else cur = 0
+  }
+  return max
+}
 
 export default function ChallengeCard({
-  label, emoji, goal, onGoalSave, days, onToggle, theme, isOwner, encouragement,
+  label, goal, onGoalSave, days, onToggle, isOwner, t, encouragement,
 }) {
   const filledCount = days.filter(Boolean).length
   const progress = Math.round((filledCount / 30) * 100)
+  const streak = getLongestStreak(days)
+  const [streakBounce, setStreakBounce] = useState(false)
+  const prevFilled = useRef(filledCount)
+
+  useEffect(() => {
+    if (filledCount > prevFilled.current) {
+      setStreakBounce(true)
+      const t = setTimeout(() => setStreakBounce(false), 500)
+      prevFilled.current = filledCount
+      return () => clearTimeout(t)
+    }
+    prevFilled.current = filledCount
+  }, [filledCount])
 
   return (
     <div style={{
-      background: '#fff', borderRadius: 20, padding: '24px 20px 20px',
-      border: `2px solid ${isOwner ? theme.color + '55' : theme.light}`,
+      background: '#fff', borderRadius: 0, padding: '22px 20px 18px',
+      border: '1.5px solid #222',
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* progress bar */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 5,
-        background: `linear-gradient(90deg, ${theme.color} ${progress}%, ${theme.light} ${progress}%)`,
-        transition: 'background 0.4s',
-      }} />
-
       {/* header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-        <span style={{ fontSize: 22 }}>{emoji}</span>
-        <span style={{ fontSize: 18, fontWeight: 700, color: theme.dark }}>{label}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <span style={{ fontSize: 22, fontWeight: 700, color: '#222' }}>{label}</span>
         {isOwner && (
           <span style={{
-            fontSize: 10, background: theme.light, color: theme.dark,
-            padding: '2px 8px', borderRadius: 10, fontWeight: 600,
-          }}>나</span>
+            fontSize: 13, background: '#222', color: '#fff',
+            padding: '2px 10px', borderRadius: 2, fontWeight: 700,
+          }}>{t.meTag}</span>
         )}
-        <div style={{ marginLeft: 'auto' }}>
-          <BunnyFace mood={filledCount >= 25 ? 'cheer' : filledCount > 0 ? 'happy' : 'neutral'} size={26} />
-        </div>
+        {/* Streak badge */}
+        {streak >= 2 && (
+          <span style={{
+            marginLeft: 'auto',
+            display: 'inline-flex', alignItems: 'center', gap: 4,
+            fontSize: 15, fontWeight: 700, color: '#222',
+            border: '1.5px solid #222', padding: '3px 10px',
+            background: '#fff',
+            animation: streakBounce ? 'countBounce 0.4s ease' : 'none',
+          }}>
+            <span style={{
+              display: 'inline-block',
+              width: 10, height: 10, borderRadius: '50%',
+              background: CRAYON_COLORS[streak % CRAYON_COLORS.length],
+              border: '1px solid #333',
+            }} />
+            {streak} {t.streakLabel}
+          </span>
+        )}
       </div>
 
-      {/* goal */}
-      <EditableGoal goal={goal} onSave={onGoalSave} themeColor={theme} isOwner={isOwner} />
+      {/* goal — prominent */}
+      <EditableGoal goal={goal} onSave={onGoalSave} isOwner={isOwner} t={t} />
 
       {/* encouragement */}
       {encouragement}
 
+      {/* Progress bar */}
+      <ProgressBar filled={filledCount} t={t} />
+
+      {/* Achievement badges */}
+      <AchievementBadges filled={filledCount} t={t} />
+
       {/* grid */}
       <div style={{
         display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)',
-        gap: 6, justifyItems: 'center', marginBottom: 16,
+        gap: '2px 4px', justifyItems: 'center', marginBottom: 16,
       }}>
         {days.map((filled, i) => (
-          <CrayonCircle
+          <BearCircle
             key={i} index={i} filled={filled}
-            onClick={() => onToggle(i)} size={42}
+            onClick={() => onToggle(i)} size={44}
             disabled={!isOwner}
           />
         ))}
@@ -59,18 +98,24 @@ export default function ChallengeCard({
       {/* footer */}
       <div style={{
         display: 'flex', justifyContent: 'space-between',
-        alignItems: 'center', fontSize: 13, color: '#999',
+        alignItems: 'center', fontSize: 16,
+        borderTop: '1px dashed #ddd', paddingTop: 12,
       }}>
         <span>
-          <span style={{ color: theme.dark, fontWeight: 700, fontSize: 20 }}>{filledCount}</span>
-          <span style={{ color: '#bbb' }}> / 30일</span>
+          <span style={{
+            color: '#222', fontWeight: 700, fontSize: 24,
+            animation: streakBounce ? 'countBounce 0.4s ease' : 'none',
+          }}>{filledCount}</span>
+          <span style={{ color: '#999', fontWeight: 700 }}> / 30{t.days}</span>
         </span>
         <span style={{
-          background: filledCount === 30 ? 'linear-gradient(135deg, #d5f5e0, #e8ffd5)' : theme.light + '66',
-          color: filledCount === 30 ? '#2d8a4e' : theme.dark,
-          padding: '4px 14px', borderRadius: 20, fontWeight: 600, fontSize: 12,
+          background: filledCount === 30 ? '#222' : '#fff',
+          color: filledCount === 30 ? '#fff' : '#444',
+          padding: '4px 14px', borderRadius: 2, fontWeight: 700, fontSize: 15,
+          border: '1.5px solid #222',
+          animation: filledCount === 30 ? 'pulseGlow 1.5s ease infinite' : 'none',
         }}>
-          {filledCount === 30 ? '🎉 완료!' : filledCount >= 20 ? `🔥 ${progress}%` : `${progress}%`}
+          {filledCount === 30 ? t.complete : `${progress}%`}
         </span>
       </div>
     </div>
