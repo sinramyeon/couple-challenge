@@ -4,9 +4,18 @@ export default function EditableGoal({ goal, onSave, isOwner, t }) {
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(goal || '')
   const inputRef = useRef(null)
+  const savingRef = useRef(false)
 
   useEffect(() => { setDraft(goal || '') }, [goal])
   useEffect(() => { if (editing && inputRef.current) inputRef.current.focus() }, [editing])
+
+  const save = () => {
+    if (savingRef.current) return
+    savingRef.current = true
+    onSave(draft)
+    setEditing(false)
+    setTimeout(() => { savingRef.current = false }, 100)
+  }
 
   const baseStyle = {
     background: '#fafafa', borderRadius: 0,
@@ -38,10 +47,10 @@ export default function EditableGoal({ goal, onSave, isOwner, t }) {
           ref={inputRef} type="text" value={draft}
           onChange={e => setDraft(e.target.value)}
           onKeyDown={e => {
-            if (e.key === 'Enter') { onSave(draft); setEditing(false) }
+            if (e.key === 'Enter') save()
             if (e.key === 'Escape') { setDraft(goal || ''); setEditing(false) }
           }}
-          onBlur={() => { onSave(draft); setEditing(false) }}
+          onBlur={save}
           placeholder={t.goalPlaceholder}
           style={{
             flex: 1, border: 'none', background: 'transparent',
@@ -50,7 +59,8 @@ export default function EditableGoal({ goal, onSave, isOwner, t }) {
           }}
         />
         <button
-          onClick={() => { onSave(draft); setEditing(false) }}
+          onMouseDown={e => e.preventDefault()}
+          onClick={save}
           style={{
             background: '#222', color: '#fff', border: 'none',
             borderRadius: 2, padding: '5px 14px', fontSize: 14,

@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { getTranslations } from './lib/i18n'
-import { THEMES } from './lib/constants'
 import ChallengeCard from './components/ChallengeCard'
 import EncouragementBanner from './components/EncouragementBanner'
 import { Confetti, CelebrationModal } from './components/Celebration'
@@ -135,8 +134,8 @@ export default function DevApp() {
     onGoalSave: (g) => updateGoal(g),
     days: challenge[`days_${side}`],
     onToggle: (i) => toggleDay(i),
-    theme: THEMES[side],
     isOwner: side === mySide,
+    startDate: new Date(Date.now() - 5 * 86400000).toISOString(),
     t,
   })
 

@@ -8,7 +8,7 @@ import { CRAYON_COLORS } from '../lib/constants'
   with multiply blend so the black outlines stay and color fills the white.
 */
 
-export default function BearCircle({ index, filled, onClick, size = 52, disabled }) {
+export default function BearCircle({ index, filled, onClick, size = 52, disabled, isToday, t }) {
   const canvasRef = useRef(null)
   const drawnRef = useRef(false)
   const [justChecked, setJustChecked] = useState(false)
@@ -108,13 +108,16 @@ export default function BearCircle({ index, filled, onClick, size = 52, disabled
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
       {/* Number above */}
       <span style={{
-        fontSize: 13, fontWeight: 700,
-        color: filled ? '#222' : '#bbb',
+        fontSize: isToday ? 11 : 13, fontWeight: 700,
+        color: isToday ? '#fff' : (filled ? '#222' : '#bbb'),
         fontFamily: "'Gaegu', sans-serif",
         marginBottom: 1,
         transition: 'color 0.3s',
+        ...(isToday ? {
+          background: '#222', padding: '0 5px', borderRadius: 2,
+        } : {}),
       }}>
-        {index + 1}
+        {isToday ? (t?.today || 'today') : (index + 1)}
       </span>
 
       <div
@@ -123,7 +126,8 @@ export default function BearCircle({ index, filled, onClick, size = 52, disabled
           width: size, height: size, position: 'relative',
           cursor: disabled ? 'default' : 'pointer',
           transition: 'transform 0.15s',
-          animation: justChecked ? 'stampIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
+          animation: justChecked ? 'stampIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                   : (isToday && !filled) ? 'pulseGlow 2s ease infinite' : 'none',
           isolation: 'isolate',
         }}
         onMouseEnter={e => { if (!disabled) e.currentTarget.style.transform = 'scale(1.08)' }}

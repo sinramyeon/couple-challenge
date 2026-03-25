@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useAuth, useChallenge } from './lib/hooks'
-import { THEMES, CRAYON_COLORS } from './lib/constants'
 import { getTranslations } from './lib/i18n'
 import ChallengeCard from './components/ChallengeCard'
 import EncouragementBanner from './components/EncouragementBanner'
@@ -371,7 +370,9 @@ function ChallengeScreen({ challenge, mySide, onToggle, onUpdateGoal, lang, setL
   const [showConfetti, setShowConfetti] = useState(false)
   const [milestone, setMilestone] = useState(null)
   const [sparkle, setSparkle] = useState(null)
+  const [partnerToast, setPartnerToast] = useState(null)
   const prevMyCount = useRef(0)
+  const prevOtherCount = useRef(0)
   const prevCounts = useRef({ a: 0, b: 0 })
 
   const myCount = challenge[`days_${mySide}`].filter(Boolean).length
@@ -395,6 +396,17 @@ function ChallengeScreen({ challenge, mySide, onToggle, onUpdateGoal, lang, setL
     prevMyCount.current = myCount
   }, [myCount, t])
 
+  // Partner check-in notification
+  useEffect(() => {
+    if (otherCount > prevOtherCount.current && prevOtherCount.current > 0) {
+      const name = challenge[`name_${otherSide}`]
+      setPartnerToast(t.partnerCheckedIn(name))
+      const timer = setTimeout(() => setPartnerToast(null), 3000)
+      return () => clearTimeout(timer)
+    }
+    prevOtherCount.current = otherCount
+  }, [otherCount, challenge, otherSide, t])
+
   useEffect(() => {
     if (countA === 30 && prevCounts.current.a < 30)
       setTimeout(() => { setCelebration(challenge.name_a); setShowConfetti(true) }, 400)
@@ -417,8 +429,8 @@ function ChallengeScreen({ challenge, mySide, onToggle, onUpdateGoal, lang, setL
     onGoalSave: (g) => onUpdateGoal(g),
     days: challenge[`days_${side}`],
     onToggle: (i) => onToggle(i),
-    theme: THEMES[side],
     isOwner: side === mySide,
+    startDate: challenge.created_at,
     t,
   })
 
@@ -437,6 +449,21 @@ function ChallengeScreen({ challenge, mySide, onToggle, onUpdateGoal, lang, setL
         {celebration && (
           <CelebrationModal name={celebration} t={t}
             onClose={() => { setCelebration(null); setTimeout(() => setShowConfetti(false), 500) }} />
+        )}
+
+        {/* Partner check-in toast */}
+        {partnerToast && (
+          <div style={{
+            position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+            zIndex: 9990, background: '#222', color: '#fff',
+            padding: '10px 20px', border: '2px solid #222',
+            fontSize: 15, fontWeight: 700, fontFamily: "'Gaegu', sans-serif",
+            animation: 'slideDown 0.3s ease-out',
+            boxShadow: '3px 3px 0 rgba(0,0,0,0.15)',
+            whiteSpace: 'nowrap',
+          }}>
+            {partnerToast}
+          </div>
         )}
 
         <div style={{ maxWidth: 880, margin: '0 auto' }}>

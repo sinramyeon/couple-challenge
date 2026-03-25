@@ -94,6 +94,14 @@ export function useChallenge(session) {
       }, (payload) => {
         setChallenge(payload.new)
       })
+      .on('postgres_changes', {
+        event: 'DELETE',
+        schema: 'public',
+        table: 'challenges',
+        filter: `id=eq.${challenge.id}`,
+      }, () => {
+        setChallenge(null)
+      })
       .subscribe()
 
     return () => {

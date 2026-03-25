@@ -1,12 +1,3 @@
-export const PASTEL_FILLS = [
-  "#E8D5F5","#D5E8F5","#F5E0D5","#D5F5E0","#F5F0D5",
-  "#F5D5E8","#D5F5F0","#F0D5F5","#E0F5D5","#F5D5D5",
-  "#D5E0F5","#E8F5D5","#F5D5F0","#D5F5E8","#F0F5D5",
-  "#F5E8D5","#D5F0F5","#E0D5F5","#F5D5E0","#D5F5D5",
-  "#E8D5F5","#D5E8F5","#F5E0D5","#D5F5E0","#F5F0D5",
-  "#F5D5E8","#D5F5F0","#F0D5F5","#E0F5D5","#F5D5D5",
-]
-
 /*
   30 unique crayon colors — arranged so adjacent bears
   never share the same hue. Palette covers full spectrum:
@@ -46,7 +37,3 @@ export const CRAYON_COLORS = [
   "#8F7CFF", // lavender blue
 ]
 
-export const THEMES = {
-  a: { color: '#333', dark: '#111', light: '#f5f5f5', border: '#ddd' },
-  b: { color: '#333', dark: '#111', light: '#f5f5f5', border: '#ddd' },
-}

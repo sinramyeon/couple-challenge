@@ -27,10 +27,10 @@ export default function EncouragementBanner({ myCount, theirCount, theirName, la
       animation: 'slideDown 0.3s ease-out',
     }}>
       <div style={{ flex: 1 }}>
-        <p style={{ fontSize: 12, color: '#999', fontWeight: 700, margin: '0 0 2px' }}>
+        <p style={{ fontSize: 14, color: '#999', fontWeight: 700, margin: '0 0 2px' }}>
           {t.ahead(theirName, theirCount - myCount)}
         </p>
-        <p style={{ fontSize: 14, color: '#444', margin: 0, lineHeight: 1.4 }}>{msg}</p>
+        <p style={{ fontSize: 16, color: '#444', fontWeight: 500, margin: 0, lineHeight: 1.4 }}>{msg}</p>
       </div>
       <button
         onClick={() => setDismissed(true)}

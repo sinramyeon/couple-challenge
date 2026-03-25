@@ -49,6 +49,9 @@ const translations = {
     complete: '완료!',
 
     daysRemaining: (n) => `D-${n}`,
+    uncheckConfirm: '체크를 해제할까요?',
+    partnerCheckedIn: (name) => `${name}님이 체크인했어요!`,
+    today: '오늘',
     footerTip: '동그라미를 눌러 체크인 · 목표 클릭해서 수정',
 
     ahead: (name, gap) => `${name}이(가) ${gap}일 앞서고 있어요!`,
@@ -70,15 +73,15 @@ const translations = {
     },
 
     milestones: {
-      1:  { icon: '🌱', text: '첫 발자국!', sub: '시작이 반이야' },
-      3:  { icon: '🌿', text: '3일 달성!', sub: '좋은 출발이야' },
-      5:  { icon: '⭐', text: '5일 돌파!', sub: '습관이 생기기 시작해' },
+      1:  { icon: '🌱', text: '첫 발자국!', sub: '시작이 반입니다!' },
+      3:  { icon: '🌿', text: '3일 달성!', sub: '좋은 출발이예요.' },
+      5:  { icon: '⭐', text: '5일 돌파!', sub: '습관이 생기기 시작하고 있어요!' },
       7:  { icon: '🌈', text: '일주일 달성!', sub: '벌써 일주일이야!' },
       10: { icon: '🔥', text: '10일 돌파!', sub: '3분의 1 완료!' },
-      15: { icon: '🎪', text: '반이나 왔어!', sub: '절반 달성! 대단해!' },
+      15: { icon: '🎪', text: '반이나 왔어!', sub: '절반 달성! 대단해요!' },
       20: { icon: '🚀', text: '20일 돌파!', sub: '이제 10일만 더!' },
       25: { icon: '💎', text: '거의 다 왔어!', sub: '마지막 스퍼트!' },
-      28: { icon: '🏃', text: '2일만 더!', sub: '코앞이야!!' },
+      28: { icon: '🏃', text: '2일만 더!', sub: '코앞이예요!!' },
       30: { icon: '🏆', text: '30일 완주!!', sub: '정말 대단해!!' },
     },
 
@@ -87,7 +90,7 @@ const translations = {
 
     celebTitle: '대단해요!!',
     celebCompleted: '30일 챌린지 완주!',
-    celebMsg: '매일매일 꾸준히 해낸 당신, 정말 대단해요!\n30일의 노력이 만든 이 결과, 자랑스러워해도 돼요.\n이 습관이 앞으로도 쭉 이어지길 응원할게요',
+    celebMsg: '매일매일 꾸준히 해낸 당신, 정말 대단해요!!\n30일의 노력이 만든 이 결과 충분히 자랑스러워해도 돼요.\n이 습관이 앞으로도 쭉 이어지길 응원할게요!',
     celebClose: '계속 응원하기',
   },
 
@@ -141,37 +144,40 @@ const translations = {
     complete: 'Done!',
 
     daysRemaining: (n) => `D-${n}`,
+    uncheckConfirm: 'Uncheck this day?',
+    partnerCheckedIn: (name) => `${name} just checked in!`,
+    today: 'today',
     footerTip: 'Tap circles to check in · Click goal to edit',
 
     ahead: (name, gap) => `${name} is ${gap} days ahead!`,
     encouragements: {
       3: [
-        "A little behind, but that's okay! Start again today",
-        'You can still catch up! Keep going',
-        "It's fine to go slow, just don't give up",
+        "A little behind, but that's okay! Start again today ro!",
+        'You can still catch up! Keep going ro!',
+        "It's fine to go slowo, just don't give up ro!",
       ],
       7: [
-        "Falling behind... but it's not too late!",
-        'Your partner is working hard! Get motivated!',
-        '7 days gap — one week to catch up!',
+        "Falling behindro... but it's not too late!",
+        'Your partner is working hard ro! Get motivated!',
+        '7 days gap?! — one week to catch up ro!',
       ],
       12: [
-        "Don't give up! Now is the best time to start",
-        "Your partner is rooting for you! Let's go together",
+        "Don't give up rooo! Now is the best time to start hehe",
+        "Your partner is rooting for you!! Let's go togetherooo",
       ],
     },
 
     milestones: {
-      1:  { icon: '🌱', text: 'First step!', sub: 'The journey begins' },
-      3:  { icon: '🌿', text: '3 days done!', sub: 'Great start' },
-      5:  { icon: '⭐', text: '5 days!', sub: 'Building a habit' },
-      7:  { icon: '🌈', text: 'One week!', sub: 'A whole week!' },
-      10: { icon: '🔥', text: '10 days!', sub: 'One-third done!' },
-      15: { icon: '🎪', text: 'Halfway!', sub: '50% complete!' },
-      20: { icon: '🚀', text: '20 days!', sub: 'Just 10 more!' },
-      25: { icon: '💎', text: 'Almost there!', sub: 'Final stretch!' },
-      28: { icon: '🏃', text: '2 more days!', sub: 'So close!!' },
-      30: { icon: '🏆', text: '30 days!!', sub: 'Incredible!!' },
+      1:  { icon: '🌱', text: 'First step!', sub: 'The journey begins ro!' },
+      3:  { icon: '🌿', text: '3 days done!', sub: 'Great start ro!' },
+      5:  { icon: '⭐', text: '5 days!', sub: 'Building a habit ro' },
+      7:  { icon: '🌈', text: 'One week!', sub: 'A whole week rooo!' },
+      10: { icon: '🔥', text: '10 days!', sub: 'One-third done hehe!' },
+      15: { icon: '🎪', text: 'Halfway!', sub: '50% complete roooo so proudooo!' },
+      20: { icon: '🚀', text: '20 days!', sub: 'Just 10 more ro!' },
+      25: { icon: '💎', text: 'Almost there!', sub: 'Final stretch ro!' },
+      28: { icon: '🏃', text: '2 more days!', sub: 'So close roooo!!' },
+      30: { icon: '🏆', text: '30 days!!', sub: 'Incredible rooooooo!!' },
     },
 
     streakLabel: 'streak',
@@ -179,7 +185,7 @@ const translations = {
 
     celebTitle: 'Amazing!!',
     celebCompleted: '30-Day Challenge Complete!',
-    celebMsg: "You showed up every single day — that's incredible!\nBe proud of what 30 days of effort brought you.\nWe hope this habit stays with you forever",
+    celebMsg: "You showed up every single day ro!!! that's incredible!\nBe proudo of what 30 days of effort brought you.\nWe hope this habit stays with you forever rooo!!!",
     celebClose: 'Keep going',
   },
 }

@@ -14,12 +14,23 @@ function getLongestStreak(days) {
   return max
 }
 
+function getTodayIndex(startDate) {
+  if (!startDate) return -1
+  const start = new Date(startDate)
+  start.setHours(0, 0, 0, 0)
+  const now = new Date()
+  now.setHours(0, 0, 0, 0)
+  const diff = Math.floor((now - start) / 86400000)
+  return diff >= 0 && diff < 30 ? diff : -1
+}
+
 export default function ChallengeCard({
-  label, goal, onGoalSave, days, onToggle, isOwner, t, encouragement,
+  label, goal, onGoalSave, days, onToggle, isOwner, t, encouragement, startDate,
 }) {
   const filledCount = days.filter(Boolean).length
   const progress = Math.round((filledCount / 30) * 100)
   const streak = getLongestStreak(days)
+  const todayIndex = getTodayIndex(startDate)
   const [streakBounce, setStreakBounce] = useState(false)
   const prevFilled = useRef(filledCount)
 
@@ -89,8 +100,16 @@ export default function ChallengeCard({
         {days.map((filled, i) => (
           <BearCircle
             key={i} index={i} filled={filled}
-            onClick={() => onToggle(i)} size={44}
+            isToday={i === todayIndex}
+            onClick={() => {
+              if (filled && isOwner) {
+                if (!window.confirm(t.uncheckConfirm)) return
+              }
+              onToggle(i)
+            }}
+            size={44}
             disabled={!isOwner}
+            t={t}
           />
         ))}
       </div>
