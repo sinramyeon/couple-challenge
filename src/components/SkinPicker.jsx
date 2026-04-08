@@ -42,7 +42,7 @@ export default function SkinPicker({ currentSkin, onSelect, onUnlock, onClose, l
           fontFamily: "'JejuGothic', sans-serif",
           textAlign: 'center', marginBottom: 6,
         }}>
-          {isKo ? '챌린지 스킨 선택' : 'choose bear skinrino'}
+          {isKo ? '챌린지 스킨 선택' : 'choose challenge skin'}
         </h3>
 
         {canUnlock && (
@@ -52,7 +52,7 @@ export default function SkinPicker({ currentSkin, onSelect, onUnlock, onClose, l
             marginBottom: 16,
             animation: 'pulseGlow 1.5s ease infinite',
           }}>
-            🎁 {isKo ? '새 스킨을 골라보세요!' : 'pick a new skin to unlock ro!'}
+            🎁 {isKo ? '새 스킨을 골라보세요!' : 'pick a new skin to unlock!'}
           </p>
         )}
 

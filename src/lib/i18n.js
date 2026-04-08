@@ -215,10 +215,10 @@ const translations = {
     celebClose: 'keep goin ro!!',
 
     skinPickerTitle: 'choose skins',
-    skinLocked: '🔒 level up to pick new skins ro!',
+    skinLocked: '🔒 level up to pick new skins!',
     changeSkin: 'change skino',
 
-    sendNudge: 'nudge ro',
+    sendNudge: 'nudge nudge',
     nudgeDesc: 'send check-in remindo to partner',
     nudgeSent: 'nudged ro!',
     nudgeReceived: (name) => `${name} nudged you!! go check in!!`,
