@@ -224,9 +224,18 @@ export function useChallenge(session) {
   }
 
   // ─── Phase 2: Send nudge ───
-  // Uses Supabase Realtime broadcast (no DB column needed)
+  // Saves to DB (so partner sees it even if offline) + broadcast for real-time
   const sendNudge = async () => {
     if (!challenge?.id || !mySide) return
+
+    // Save to DB so partner sees it when they open the app
+    const nudgeKey = `last_nudge_${mySide}`
+    await supabase
+      .from('challenges')
+      .update({ [nudgeKey]: new Date().toISOString() })
+      .eq('id', challenge.id)
+
+    // Also broadcast for instant delivery if partner is online
     const ch = supabase.channel(`nudge-${challenge.id}`)
     await ch.send({
       type: 'broadcast',
@@ -250,7 +259,40 @@ export function useChallenge(session) {
 
   // ─── Phase 2: Listen for nudges & reactions ───
   const [incomingInteraction, setIncomingInteraction] = useState(null)
+  const nudgeCheckedRef = useRef(false)
 
+  // Check DB for pending nudge on load / foreground
+  useEffect(() => {
+    if (!challenge?.id || !mySide || nudgeCheckedRef.current) return
+    nudgeCheckedRef.current = true
+
+    const otherNudgeKey = `last_nudge_${mySide === 'a' ? 'b' : 'a'}`
+    const otherName = challenge[`name_${mySide === 'a' ? 'b' : 'a'}`]
+    const nudgeTime = challenge[otherNudgeKey]
+
+    if (nudgeTime) {
+      setIncomingInteraction({ type: 'nudge', name: otherName, id: Date.now() })
+      // Clear the nudge in DB so it doesn't show again
+      supabase
+        .from('challenges')
+        .update({ [otherNudgeKey]: null })
+        .eq('id', challenge.id)
+        .then(() => {})
+    }
+  }, [challenge?.id, mySide])
+
+  // Reset nudge check on foreground return
+  useEffect(() => {
+    const handler = () => {
+      if (document.visibilityState === 'visible') {
+        nudgeCheckedRef.current = false
+      }
+    }
+    document.addEventListener('visibilitychange', handler)
+    return () => document.removeEventListener('visibilitychange', handler)
+  }, [])
+
+  // Real-time broadcast (instant when both online)
   useEffect(() => {
     if (!challenge?.id || !mySide) return
 
@@ -262,6 +304,13 @@ export function useChallenge(session) {
             type: 'nudge', name: payload.name,
             id: Date.now(),
           })
+          // Clear DB nudge since we already showed it
+          const otherNudgeKey = `last_nudge_${payload.from}`
+          supabase
+            .from('challenges')
+            .update({ [otherNudgeKey]: null })
+            .eq('id', challenge.id)
+            .then(() => {})
         }
       })
       .subscribe()

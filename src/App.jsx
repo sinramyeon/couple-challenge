@@ -660,6 +660,16 @@ export default function App() {
   useEffect(() => { localStorage.setItem('challenge-lang', lang) }, [lang])
   useEffect(() => { localStorage.setItem('challenge-skin', skinId) }, [skinId])
 
+  // Sync skin from DB when challenge loads
+  useEffect(() => {
+    if (challenge && mySide) {
+      const dbSkin = challenge[`skin_${mySide}`]
+      if (dbSkin && dbSkin !== skinId) {
+        setSkinId(dbSkin)
+      }
+    }
+  }, [challenge?.id, mySide])
+
   const { session, loading: authLoading, signInWithGoogle, signInWithEmail, signOut } = useAuth()
   const {
     challenge, loading: challengeLoading, mySide,
