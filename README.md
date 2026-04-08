@@ -96,7 +96,7 @@ Supabase 없이 모든 기능 테스트 가능:
 
 ### 2. Migration (v2)
 
-`supbase-migration-v2.sql`을 SQL Editor에서 실행. 포함 내용:
+`supabase-migration-v2.sql`을 SQL Editor에서 실행. 포함 내용:
 - `skin_a`/`skin_b` — 스킨 선택 저장
 - `last_nudge_a`/`last_nudge_b` — 찔러보기 DB 저장 (오프라인 수신)
 - `note_a`/`note_b`, `mood_a`/`mood_b` — 일일 노트/무드
