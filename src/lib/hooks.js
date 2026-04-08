@@ -52,11 +52,11 @@ export function useChallenge(session) {
   const [error, setError] = useState(null)
   const channelRef = useRef(null)
 
-  const myEmail = session?.user?.email
+  const myEmail = session?.user?.email?.toLowerCase()
 
   // Determine which side I am
   const mySide = challenge
-    ? challenge.email_a === myEmail ? 'a' : 'b'
+    ? challenge.email_a?.toLowerCase() === myEmail ? 'a' : 'b'
     : null
 
   // Load my active challenge
