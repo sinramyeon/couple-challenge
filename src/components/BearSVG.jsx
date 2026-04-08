@@ -14,6 +14,7 @@ const SKIN_IMAGES = {
   simple: '/damgom_cry.png',
   shiver: '/damgom_cry_shiver.png',
   chiikawa: '/chiikawa.png',
+  hachiware: '/hachiware_toilet.png',
 }
 
 // Image scale per skin (character fills different % of the PNG)
@@ -22,6 +23,7 @@ const SKIN_SCALE = {
   simple: 1.35,
   shiver: 1.25,
   chiikawa: 1.3,
+  hachiware: 1.4,
 }
 
 const SKIN_CLIP = {
@@ -38,6 +40,12 @@ const SKIN_CLIP = {
   ],
   chiikawa: [
     { cx: 0.50, cy: 0.48, rx: 0.38, ry: 0.40 },
+  ],
+  hachiware: [
+    // Head + face
+    { cx: 0.52, cy: 0.32, rx: 0.38, ry: 0.30 },
+    // Body/belly
+    { cx: 0.50, cy: 0.68, rx: 0.32, ry: 0.28 },
   ],
 }
 

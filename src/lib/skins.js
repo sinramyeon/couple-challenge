@@ -74,7 +74,8 @@ export const SKIN_LIST = [
   { id: 'stripe',   img: '/damgom.png',            nameKo: '담곰',       nameEn: 'Damgom' },
   { id: 'simple',   img: '/damgom_cry.png',        nameKo: '울보 담곰',  nameEn: 'Cry Damgom ro' },
   { id: 'shiver',   img: '/damgom_cry_shiver.png', nameKo: '부들 담곰',  nameEn: 'Shiver Damgom' },
-  { id: 'chiikawa', img: '/chiikawa.png',          nameKo: '치이카와',   nameEn: 'Chiikawa ro' },
+  { id: 'chiikawa',  img: '/chiikawa.png',          nameKo: '치이카와',   nameEn: 'Chiikawa ro' },
+  { id: 'hachiware', img: '/hachiware_toilet.png', nameKo: '하치와레',   nameEn: 'Hachiware ro' },
 ]
 
 export const DEFAULT_SKIN = 'stripe'
