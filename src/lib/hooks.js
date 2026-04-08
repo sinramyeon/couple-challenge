@@ -335,7 +335,7 @@ export function useChallenge(session) {
 
   const clearInteraction = useCallback(() => setIncomingInteraction(null), [])
 
-  // ─── Phase 1: Update skin preference ───
+  // ─── Update skin preference ───
   const updateSkin = async (skinId) => {
     if (!challenge || !mySide) return
     const skinKey = `skin_${mySide}`
@@ -347,6 +347,23 @@ export function useChallenge(session) {
       .eq('id', challenge.id)
 
     if (err) console.warn('Skin update failed:', err.message)
+  }
+
+  // ─── Unlock a new skin (user's choice on level up) ───
+  const unlockSkin = async (skinId) => {
+    if (!challenge || !mySide) return
+    const key = `unlocked_skins_${mySide}`
+    const current = challenge[key] || ['stripe']
+    if (current.includes(skinId)) return // already unlocked
+    const updated = [...current, skinId]
+    setChallenge(prev => ({ ...prev, [key]: updated }))
+
+    const { error: err } = await supabase
+      .from('challenges')
+      .update({ [key]: updated })
+      .eq('id', challenge.id)
+
+    if (err) console.warn('Unlock skin failed:', err.message)
   }
 
   // ─── Delete challenge ───
@@ -411,8 +428,8 @@ export function useChallenge(session) {
     deleteChallenge,
     restartChallenge,
     reload: loadChallenge,
-    // Phase 1
     updateSkin,
+    unlockSkin,
     // Phase 2
     updateNote,
     updateMood,

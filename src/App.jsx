@@ -604,7 +604,8 @@ function ChallengeScreen({
 
         <div style={{ maxWidth: 880, margin: '0 auto' }}>
           {/* Couple level bar */}
-          <CoupleLevelBar daysA={challenge.days_a} daysB={challenge.days_b} bankedXP={challenge.banked_xp || 0} t={t} />
+          <CoupleLevelBar daysA={challenge.days_a} daysB={challenge.days_b} bankedXP={challenge.banked_xp || 0} t={t}
+            unlockedCount={(challenge[`unlocked_skins_${mySide}`] || ['stripe']).length} />
 
 
           {/* Nudge only */}
@@ -664,7 +665,7 @@ export default function App() {
   const {
     challenge, loading: challengeLoading, mySide,
     createChallenge, toggleDay, updateGoal, deleteChallenge, restartChallenge,
-    updateSkin, updateNote, updateMood,
+    updateSkin, unlockSkin, updateNote, updateMood,
     sendNudge, sendReaction,
     incomingInteraction, clearInteraction,
   } = useChallenge(session)
@@ -734,8 +735,10 @@ export default function App() {
         <SkinPicker
           currentSkin={skinId}
           onSelect={handleSkinChange}
+          onUnlock={unlockSkin}
           onClose={() => setShowSkinPicker(false)}
           lang={lang}
+          unlockedSkins={challenge[`unlocked_skins_${mySide}`] || ['stripe']}
           coupleLevel={getLevel(calculateCoupleXP(challenge.days_a, challenge.days_b) + (challenge.banked_xp || 0)).level}
         />
       )}

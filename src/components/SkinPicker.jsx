@@ -3,13 +3,17 @@ import { SKIN_LIST } from '../lib/skins'
 import BearSVG from './BearSVG'
 
 /*
-  Skin picker — skins unlock as couple level increases.
-  Level up → picker opens automatically so user can choose.
+  Skin picker — level up = pick a new skin to unlock.
+  unlockedSkins: array of skin IDs the user has unlocked (e.g. ['stripe', 'chiikawa'])
+  unlockSlots: how many total skins the user can have (= coupleLevel, capped at SKIN_LIST.length)
+  canUnlock: unlockSlots > unlockedSkins.length (user has a pending unlock to use)
 */
 
-export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupleLevel }) {
+export default function SkinPicker({ currentSkin, onSelect, onUnlock, onClose, lang, unlockedSkins, coupleLevel }) {
   const [hoveredSkin, setHoveredSkin] = useState(null)
   const isKo = lang === 'ko'
+  const unlockSlots = Math.min(coupleLevel, SKIN_LIST.length)
+  const canUnlock = unlockSlots > unlockedSkins.length
 
   return (
     <>
@@ -36,10 +40,21 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
         <h3 style={{
           fontSize: 22, fontWeight: 700, color: '#222',
           fontFamily: "'JejuGothic', sans-serif",
-          textAlign: 'center', marginBottom: 20,
+          textAlign: 'center', marginBottom: 6,
         }}>
           {isKo ? '챌린지 스킨 선택' : 'choose bear skinrino'}
         </h3>
+
+        {canUnlock && (
+          <p style={{
+            textAlign: 'center', fontSize: 14, color: '#e67e22',
+            fontWeight: 700, fontFamily: "'JejuGothic', sans-serif",
+            marginBottom: 16,
+            animation: 'pulseGlow 1.5s ease infinite',
+          }}>
+            🎁 {isKo ? '새 스킨을 골라보세요!' : 'pick a new skin to unlock ro!'}
+          </p>
+        )}
 
         <div style={{
           display: 'grid',
@@ -47,27 +62,38 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
           gap: 12, maxWidth: 600, margin: '0 auto',
         }}>
           {SKIN_LIST.map(skin => {
+            const isUnlocked = unlockedSkins.includes(skin.id)
             const isActive = currentSkin === skin.id
             const isHovered = hoveredSkin === skin.id
-            const isLocked = coupleLevel < skin.unlockLevel
+            const canPickToUnlock = !isUnlocked && canUnlock
+
             return (
               <button
                 key={skin.id}
                 onClick={() => {
-                  if (!isLocked) { onSelect(skin.id); onClose() }
+                  if (isUnlocked) {
+                    onSelect(skin.id)
+                    onClose()
+                  } else if (canPickToUnlock) {
+                    onUnlock(skin.id)
+                    onSelect(skin.id)
+                    onClose()
+                  }
                 }}
                 onMouseEnter={() => setHoveredSkin(skin.id)}
                 onMouseLeave={() => setHoveredSkin(null)}
                 style={{
-                  background: '#fff',
-                  border: isActive ? '2.5px solid #222' : '1.5px solid #ddd',
+                  background: canPickToUnlock ? '#fff8e8' : '#fff',
+                  border: isActive ? '2.5px solid #222'
+                    : canPickToUnlock ? '2px dashed #e67e22'
+                    : '1.5px solid #ddd',
                   padding: '16px 12px',
-                  cursor: isLocked ? 'not-allowed' : 'pointer',
+                  cursor: (isUnlocked || canPickToUnlock) ? 'pointer' : 'not-allowed',
                   transition: 'all 0.2s',
-                  transform: isHovered && !isLocked ? 'scale(1.03)' : 'scale(1)',
+                  transform: isHovered && (isUnlocked || canPickToUnlock) ? 'scale(1.03)' : 'scale(1)',
                   boxShadow: isActive ? '3px 3px 0 #222' : 'none',
                   position: 'relative',
-                  opacity: isLocked ? 0.5 : 1,
+                  opacity: (!isUnlocked && !canPickToUnlock) ? 0.4 : 1,
                 }}
               >
                 {/* Selected indicator */}
@@ -81,15 +107,28 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
                   }}>✓</div>
                 )}
 
-                {/* Lock overlay */}
-                {isLocked && (
+                {/* Unlock badge */}
+                {canPickToUnlock && (
+                  <div style={{
+                    position: 'absolute', top: 8, right: 8,
+                    background: '#e67e22', color: '#fff',
+                    padding: '2px 8px', fontSize: 11, fontWeight: 700,
+                    fontFamily: "'JejuGothic', sans-serif",
+                    animation: 'pulseGlow 1.5s ease infinite',
+                  }}>
+                    🎁 {isKo ? '선택!' : 'pick!'}
+                  </div>
+                )}
+
+                {/* Lock icon for truly locked */}
+                {!isUnlocked && !canPickToUnlock && (
                   <div style={{
                     position: 'absolute', top: 8, right: 8,
                     background: '#222', color: '#fff',
                     padding: '2px 8px', fontSize: 11, fontWeight: 700,
                     fontFamily: "'JejuGothic', sans-serif",
                   }}>
-                    🔒 Lv.{skin.unlockLevel}
+                    🔒
                   </div>
                 )}
 
@@ -97,7 +136,7 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
                 <div style={{
                   display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
                   gap: 2, justifyItems: 'center', marginBottom: 10,
-                  filter: isLocked ? 'grayscale(100%)' : 'none',
+                  filter: (!isUnlocked && !canPickToUnlock) ? 'grayscale(100%)' : 'none',
                   overflow: 'hidden',
                 }}>
                   {[0, 1, 2, 3, 4, 5].map(i => (
@@ -115,7 +154,7 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
 
                 <div style={{
                   fontSize: 15, fontWeight: 700,
-                  color: isLocked ? '#aaa' : '#222',
+                  color: (!isUnlocked && !canPickToUnlock) ? '#aaa' : '#222',
                   fontFamily: "'JejuGothic', sans-serif",
                   textAlign: 'center',
                 }}>

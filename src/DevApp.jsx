@@ -148,7 +148,7 @@ function DevPanel({ challenge, mySide, setMySide, fillDays, resetAll, skinId, se
       {/* Level thresholds */}
       <div style={{ marginTop: 10, fontSize: 11, color: '#666' }}>
         Lv.1=0 → Lv.2=700 → Lv.3=1500 → Lv.4=3000 XP
-        {' | '}Skins: {SKIN_LIST.map(s => `${s.id}(Lv.${s.unlockLevel})`).join(', ')}
+        {' | '}Skins: {SKIN_LIST.map(s => s.id).join(', ')}
       </div>
     </div>
   )
@@ -163,6 +163,7 @@ export default function DevApp() {
   const [skinId, setSkinId] = useState(DEFAULT_SKIN)
   const [showSkinPicker, setShowSkinPicker] = useState(false)
   const [nudgeToast, setNudgeToast] = useState(null)
+  const [unlockedSkins, setUnlockedSkins] = useState(['stripe'])
 
   const t = getTranslations(lang)
   const otherSide = mySide === 'a' ? 'b' : 'a'
@@ -330,7 +331,8 @@ export default function DevApp() {
 
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           {/* Couple Level */}
-          <CoupleLevelBar daysA={challenge.days_a} daysB={challenge.days_b} bankedXP={challenge.banked_xp || 0} t={t} />
+          <CoupleLevelBar daysA={challenge.days_a} daysB={challenge.days_b} bankedXP={challenge.banked_xp || 0} t={t}
+            unlockedCount={unlockedSkins.length} />
 
           {/* Nudge */}
           <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0', marginBottom: 8 }}>
@@ -375,13 +377,13 @@ export default function DevApp() {
             </h3>
             <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
               {SKIN_LIST.map(skin => {
-                const locked = coupleLevel < skin.unlockLevel
+                const isUnlocked = unlockedSkins.includes(skin.id)
                 return (
                   <div key={skin.id} style={{
-                    textAlign: 'center', opacity: locked ? 0.4 : 1,
+                    textAlign: 'center', opacity: isUnlocked ? 1 : 0.4,
                     border: skinId === skin.id ? '2px solid #222' : '1px solid #ddd',
-                    padding: 12, cursor: locked ? 'not-allowed' : 'pointer',
-                  }} onClick={() => !locked && setSkinId(skin.id)}>
+                    padding: 12, cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                  }} onClick={() => isUnlocked && setSkinId(skin.id)}>
                     <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 8 }}>
                       {[0, 1, 2].map(i => (
                         <BearSVG key={i} index={i} filled={true} onClick={() => {}} size={40} disabled skinId={skin.id} />
@@ -389,7 +391,7 @@ export default function DevApp() {
                     </div>
                     <div style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JejuGothic', sans-serif" }}>
                       {lang === 'ko' ? skin.nameKo : skin.nameEn}
-                      {locked && ` 🔒 Lv.${skin.unlockLevel}`}
+                      {!isUnlocked && ' 🔒'}
                     </div>
                   </div>
                 )
@@ -403,8 +405,10 @@ export default function DevApp() {
         <SkinPicker
           currentSkin={skinId}
           onSelect={setSkinId}
+          onUnlock={(id) => setUnlockedSkins(prev => [...prev, id])}
           onClose={() => setShowSkinPicker(false)}
           lang={lang}
+          unlockedSkins={unlockedSkins}
           coupleLevel={coupleLevel}
         />
       )}
