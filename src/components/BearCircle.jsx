@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { CRAYON_COLORS } from '../lib/constants'
+import { CRAYON_COLORS } from '../lib/skins'
 
 /*
   Uses the actual bear.png image.

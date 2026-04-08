@@ -105,6 +105,7 @@ const translations = {
     nudgeDesc: '상대방에게 체크인 알림 보내기',
     nudgeSent: '콕! 찔러봤어요!',
     nudgeReceived: (name) => `${name}이(가) 뭐하냐고 하네요! 빨리 체크인!!`,
+    reactionReceived: (name, emoji) => `${name}이(가) ${emoji}로 반응했어요!`,
 
     levelLabel: 'Lv.',
     xpLabel: 'XP',
@@ -221,6 +222,7 @@ const translations = {
     nudgeDesc: 'send check-in remindo to partner',
     nudgeSent: 'nudged ro!',
     nudgeReceived: (name) => `${name} nudged you!! go check in!!`,
+    reactionReceived: (name, emoji) => `${name} reacted with ${emoji} ro!`,
 
     levelLabel: 'Lv.',
     xpLabel: 'XP',

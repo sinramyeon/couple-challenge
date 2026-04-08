@@ -1,4 +1,4 @@
-import { CRAYON_COLORS } from '../lib/constants'
+import { CRAYON_COLORS } from '../lib/skins'
 
 const BADGE_THRESHOLDS = [1, 3, 5, 7, 10, 15, 20, 25, 28, 30]
 

@@ -140,7 +140,7 @@ export function CoupleSyncBadge({ myCheckedToday, partnerCheckedToday, t }) {
       fontFamily: "'JejuGothic', sans-serif",
       animation: 'badgePop 0.5s ease',
     }}>
-      💕 {t.lang === 'ko' ? '오늘 둘 다 체크인!' : 'Both checked in today!'}
+      💕 {t.coupleLevel === '커플 레벨' ? '오늘 둘 다 체크인!' : 'Both checked in today!'}
     </div>
   )
 }

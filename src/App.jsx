@@ -10,7 +10,7 @@ import SkinPicker from './components/SkinPicker'
 import BearSVG from './components/BearSVG'
 // import DailyNote from './components/DailyNote'
 import { NudgeButton, InteractionToast } from './components/CoupleInteractions'
-import CoupleLevelBar, { LevelBadge, XPPopup, calculateXP, calculateCoupleXP, getLevel } from './components/LevelSystem'
+import CoupleLevelBar, { XPPopup, calculateXP, calculateCoupleXP, getLevel } from './components/LevelSystem'
 import { DEFAULT_SKIN } from './lib/skins'
 
 const MILESTONE_THRESHOLDS = [1, 3, 5, 7, 10, 15, 20, 25, 28, 30]

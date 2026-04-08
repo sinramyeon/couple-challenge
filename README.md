@@ -7,7 +7,7 @@
 - Google / Magic Link 로그인
 - 파트너와 실시간 진행 상황 공유 (Supabase Realtime)
 - 60가지 색연필 색상의 담곰 체크인 (클릭 시 1초 색칠 애니메이션)
-- 4종 스킨: 담곰, 울보 담곰, 부들 담곰, 치이카와
+- 5종 스킨: 담곰, 울보 담곰, 부들 담곰, 치이카와, 하치와레
 - 커플 레벨 시스템 (XP 기반, 레벨업 시 새 스킨 선택 가능)
 - 30일 완주 후 새 목표로 다시 시작 (레벨 유지) 또는 새 파트너와 시작 (레벨 초기화)
 - 연속 체크인 스트릭 & 마일스톤 토스트
@@ -143,12 +143,14 @@ src/
 
 ## Skins
 
-| ID | 이미지 | 이름 | 해금 |
-|---|---|---|---|
-| stripe | damgom.png | 담곰 | Lv.1 |
-| simple | damgom_cry.png | 울보 담곰 | Lv.2 |
-| shiver | damgom_cry_shiver.png | 부들 담곰 | Lv.3 |
-| chiikawa | chiikawa.png | 치이카와 | Lv.4 |
+| ID | 이미지 | 이름 |
+|---|---|---|
+| stripe | damgom.png | 담곰 (기본) |
+| simple | damgom_cry.png | 울보 담곰 |
+| shiver | damgom_cry_shiver.png | 부들 담곰 |
+| chiikawa | chiikawa.png | 치이카와 |
+| hachiware | hachiware_toilet.png | 하치와레 |
 
+- Lv.1은 담곰만, 레벨업마다 원하는 스킨 1개를 골라서 해금
+- 선택 결과는 DB (`unlocked_skins_a`/`unlocked_skins_b`, `skin_a`/`skin_b`)에 저장
 - 레벨업 시 스킨 선택 팝업이 자동으로 열림
-- 선택 결과는 DB (`skin_a`/`skin_b`)에 저장 → 기기 간 동기화

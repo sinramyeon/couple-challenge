@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { CRAYON_COLORS } from '../lib/constants'
+import { CRAYON_COLORS } from '../lib/skins'
 
 /* ─── Mini confetti burst for milestone toasts ─── */
 function MiniBurst({ color }) {

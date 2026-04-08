@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { CRAYON_COLORS } from '../lib/constants'
+import { CRAYON_COLORS } from '../lib/skins'
 
 export function Confetti({ show }) {
   const canvasRef = useRef(null)

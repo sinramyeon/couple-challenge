@@ -158,15 +158,15 @@ export default function CoupleLevelBar({ daysA, daysB, bankedXP = 0, t, unlocked
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         gap: 8, marginBottom: 8,
       }}>
-        <span style={{ fontSize: 16 }}>💑</span>
+        <span style={{ fontSize: 20 }}>💑</span>
         <span style={{
-          fontSize: 16, fontWeight: 700, color: '#333',
+          fontSize: 18, fontWeight: 700, color: '#222',
           fontFamily: "'JejuGothic', sans-serif",
         }}>
           {t.coupleLevel}
         </span>
         <span style={{
-          fontSize: 18, fontWeight: 700, color,
+          fontSize: 22, fontWeight: 700, color,
           fontFamily: "'JejuGothic', sans-serif",
           animation: animate ? 'countBounce 0.4s ease' : 'none',
         }}>
@@ -201,7 +201,7 @@ export default function CoupleLevelBar({ daysA, daysB, bankedXP = 0, t, unlocked
       {/* XP numbers */}
       <div style={{
         display: 'flex', justifyContent: 'space-between',
-        fontSize: 11, color: '#999', fontWeight: 700, marginTop: 4,
+        fontSize: 13, color: '#666', fontWeight: 700, marginTop: 4,
         fontFamily: "'JejuGothic', sans-serif",
       }}>
         <span>{currentXP} {t.xpLabel}</span>
@@ -221,30 +221,10 @@ export default function CoupleLevelBar({ daysA, daysB, bankedXP = 0, t, unlocked
           🎁 {isKo ? '새 스킨을 고를 수 있어요!' : 'you can pick a new skin ro!'}
         </div>
       )}
-      {!hasNewSkinSlot && canUnlockMore && (
-        <div style={{
-          fontSize: 12, color: '#888', fontWeight: 700, marginTop: 8,
-          fontFamily: "'JejuGothic', sans-serif",
-          padding: '6px 12px',
-          border: '1px dashed #ddd',
-          background: '#fafafa',
-        }}>
-          🔓 {isKo ? `Lv.${unlockedCount + 1}에서 새 스킨 선택 가능` : `new skin at Lv.${unlockedCount + 1} ro`}
-        </div>
-      )}
-      {!canUnlockMore && (
-        <div style={{
-          fontSize: 12, color: '#888', fontWeight: 700, marginTop: 8,
-          fontFamily: "'JejuGothic', sans-serif",
-        }}>
-          ✨ {isKo ? '모든 스킨 해금 완료!' : 'all skins unlocked ro!'}
-        </div>
-      )}
-
       {/* XP breakdown */}
       <div style={{
-        fontSize: 10, color: '#bbb', marginTop: 8, lineHeight: 1.6,
-        fontFamily: "'JejuGothic', sans-serif",
+        fontSize: 12, color: '#999', marginTop: 8, lineHeight: 1.6,
+        fontWeight: 700, fontFamily: "'JejuGothic', sans-serif",
       }}>
         {isKo
           ? '체크인 +10 · 3일연속 +5 · 7일연속 +15 · 동시체크인 +10 · 마일스톤 +20'
