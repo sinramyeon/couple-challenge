@@ -660,6 +660,15 @@ export default function App() {
   useEffect(() => { localStorage.setItem('challenge-lang', lang) }, [lang])
   useEffect(() => { localStorage.setItem('challenge-skin', skinId) }, [skinId])
 
+  const { session, loading: authLoading, signInWithGoogle, signInWithEmail, signOut } = useAuth()
+  const {
+    challenge, loading: challengeLoading, mySide,
+    createChallenge, toggleDay, updateGoal, deleteChallenge, restartChallenge,
+    updateSkin, updateNote, updateMood,
+    sendNudge, sendReaction,
+    incomingInteraction, clearInteraction,
+  } = useChallenge(session)
+
   // Sync skin from DB when challenge loads
   useEffect(() => {
     if (challenge && mySide) {
@@ -669,15 +678,6 @@ export default function App() {
       }
     }
   }, [challenge?.id, mySide])
-
-  const { session, loading: authLoading, signInWithGoogle, signInWithEmail, signOut } = useAuth()
-  const {
-    challenge, loading: challengeLoading, mySide,
-    createChallenge, toggleDay, updateGoal, deleteChallenge, restartChallenge,
-    updateSkin, updateNote, updateMood,
-    sendNudge, sendReaction,
-    incomingInteraction, clearInteraction,
-  } = useChallenge(session)
 
   const handleNewChallenge = async () => { await deleteChallenge() }
   const handleRestartGoal = async () => {

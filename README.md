@@ -11,7 +11,7 @@
 - 커플 레벨 시스템 (XP 기반, 레벨업 시 새 스킨 선택 가능)
 - 30일 완주 후 새 목표로 다시 시작 (레벨 유지) 또는 새 파트너와 시작 (레벨 초기화)
 - 연속 체크인 스트릭 & 마일스톤 토스트
-- 찔러보기 (Nudge) — 상대방에게 체크인 알림
+- 찔러보기 (Nudge) — 상대방에게 체크인 알림 (DB 저장, 오프라인도 수신 가능)
 - 목표 인라인 편집 (본인만 수정 가능)
 - 진행도 차이에 따른 격려 메시지
 - 30일 완주 시 컨페티 + 축하 모달 + "완료!!" 버튼 wiggle 애니메이션
@@ -37,7 +37,8 @@ XP 획득 방법:
 | Lv.3 | 1500 | 부들 담곰 | ~2달 |
 | Lv.4 | 3000 | 치이카와 | ~3-4달 |
 
-레벨업 시 스킨 선택 팝업이 자동으로 열려서 새로 해금된 스킨을 고를 수 있음.
+- 레벨업 시 스킨 선택 팝업이 자동으로 열려서 새로 해금된 스킨을 고를 수 있음
+- 선택한 스킨은 DB에 저장되어 기기 간 동기화
 
 - 1달 최대 커플 XP: ~1200 (30일 완벽 + 동시 체크인)
 - XP는 챌린지 재시작 시 `banked_xp`에 누적 보존
@@ -96,7 +97,10 @@ Supabase 없이 모든 기능 테스트 가능:
 ### 2. Migration (v2)
 
 `supbase-migration-v2.sql`을 SQL Editor에서 실행. 포함 내용:
-- 스킨/노트/무드/넛지/banked_xp 컬럼 추가
+- `skin_a`/`skin_b` — 스킨 선택 저장
+- `last_nudge_a`/`last_nudge_b` — 찔러보기 DB 저장 (오프라인 수신)
+- `note_a`/`note_b`, `mood_a`/`mood_b` — 일일 노트/무드
+- `banked_xp` — 챌린지 재시작 시 누적 XP 보존
 - 이메일 소문자 정규화
 - RLS 정책 업데이트 (대소문자 무시 + 챌린지 리셋 허용)
 - 인덱스 추가
@@ -128,7 +132,7 @@ src/
 │   ├── SkinPicker.jsx          # 스킨 선택 (레벨별 해금)
 │   └── WashiTape.jsx           # 장식 테이프
 ├── lib/
-│   ├── hooks.js                # useAuth, useChallenge, restartChallenge
+│   ├── hooks.js                # useAuth, useChallenge, nudge DB 저장/수신
 │   ├── i18n.js                 # 다국어 (ko/en 귀여운 말투)
 │   ├── skins.js                # 60색 팔레트, 스킨 목록 + 해금 레벨
 │   └── supabase.js             # Supabase 클라이언트
@@ -146,4 +150,5 @@ src/
 | shiver | damgom_cry_shiver.png | 부들 담곰 | Lv.3 |
 | chiikawa | chiikawa.png | 치이카와 | Lv.4 |
 
-레벨업 시 스킨 선택 팝업이 자동으로 열림.
+- 레벨업 시 스킨 선택 팝업이 자동으로 열림
+- 선택 결과는 DB (`skin_a`/`skin_b`)에 저장 → 기기 간 동기화
