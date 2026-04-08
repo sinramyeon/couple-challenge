@@ -110,7 +110,7 @@ export default function BearCircle({ index, filled, onClick, size = 52, disabled
       <span style={{
         fontSize: isToday ? 11 : 13, fontWeight: 700,
         color: isToday ? '#fff' : (filled ? '#222' : '#bbb'),
-        fontFamily: "'Gaegu', sans-serif",
+        fontFamily: "'JejuGothic', sans-serif",
         marginBottom: 1,
         transition: 'color 0.3s',
         ...(isToday ? {

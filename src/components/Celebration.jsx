@@ -66,7 +66,7 @@ export function Confetti({ show }) {
   )
 }
 
-export function CelebrationModal({ name, onClose, t }) {
+export function CelebrationModal({ name, onClose, onRestart, bothComplete, t }) {
   return (
     <div
       style={{
@@ -119,7 +119,7 @@ export function CelebrationModal({ name, onClose, t }) {
             padding: '12px 32px', borderRadius: 0, cursor: 'pointer',
             background: '#222', border: '2px solid #222',
             color: '#fff', fontSize: 16, fontWeight: 700,
-            fontFamily: "'Gaegu', sans-serif",
+            fontFamily: "'JejuGothic', sans-serif",
             transition: 'transform 0.15s',
           }}
           onMouseDown={e => e.currentTarget.style.transform = 'scale(0.96)'}
@@ -127,6 +127,19 @@ export function CelebrationModal({ name, onClose, t }) {
         >
           {t.celebClose}
         </button>
+        {bothComplete && onRestart && (
+          <button
+            onClick={onRestart}
+            style={{
+              marginTop: 10, padding: '10px 24px', cursor: 'pointer',
+              background: '#fff', border: '2px solid #222',
+              color: '#222', fontSize: 14, fontWeight: 700,
+              fontFamily: "'JejuGothic', sans-serif",
+            }}
+          >
+            {t.restartNewGoal || '새로운 목표로 다시 시작!'}
+          </button>
+        )}
       </div>
     </div>
   )

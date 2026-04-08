@@ -55,7 +55,7 @@ export default function EditableGoal({ goal, onSave, isOwner, t }) {
           style={{
             flex: 1, border: 'none', background: 'transparent',
             fontSize: 20, outline: 'none', color: '#222', fontWeight: 700,
-            fontFamily: "'Gaegu', sans-serif",
+            fontFamily: "'JejuGothic', sans-serif",
           }}
         />
         <button
@@ -65,7 +65,7 @@ export default function EditableGoal({ goal, onSave, isOwner, t }) {
             background: '#222', color: '#fff', border: 'none',
             borderRadius: 2, padding: '5px 14px', fontSize: 14,
             fontWeight: 700, cursor: 'pointer', whiteSpace: 'nowrap',
-            fontFamily: "'Gaegu', sans-serif",
+            fontFamily: "'JejuGothic', sans-serif",
           }}
         >
           {t.save}

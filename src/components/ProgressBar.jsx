@@ -1,4 +1,4 @@
-import { CRAYON_COLORS } from '../lib/constants'
+import { CRAYON_COLORS } from '../lib/skins'
 import { useEffect, useRef } from 'react'
 
 const MILESTONE_MARKS = [5, 10, 15, 20, 25, 30]

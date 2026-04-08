@@ -28,7 +28,7 @@ export default function BearPreview() {
   return (
     <div style={{
       minHeight: '100vh', background: '#fff', padding: '40px 20px',
-      fontFamily: "'Gaegu', sans-serif",
+      fontFamily: "'JejuGothic', sans-serif",
     }}>
       <div style={{ maxWidth: 420, margin: '0 auto' }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, textAlign: 'center', color: '#222', marginBottom: 4 }}>
@@ -68,7 +68,7 @@ export default function BearPreview() {
             style={{
               background: '#fff', border: '1px solid #222', padding: '8px 16px',
               fontSize: 14, fontWeight: 700, cursor: 'pointer', marginRight: 8,
-              fontFamily: "'Gaegu', sans-serif",
+              fontFamily: "'JejuGothic', sans-serif",
             }}
           >
             Reset All
@@ -78,7 +78,7 @@ export default function BearPreview() {
             style={{
               background: '#222', border: '1px solid #222', color: '#fff',
               padding: '8px 16px', fontSize: 14, fontWeight: 700, cursor: 'pointer',
-              fontFamily: "'Gaegu', sans-serif",
+              fontFamily: "'JejuGothic', sans-serif",
             }}
           >
             Fill All
