@@ -92,7 +92,7 @@ export function useChallenge(session) {
         table: 'challenges',
         filter: `id=eq.${challenge.id}`,
       }, (payload) => {
-        setChallenge(payload.new)
+        setChallenge(prev => prev ? { ...prev, ...payload.new } : payload.new)
       })
       .on('postgres_changes', {
         event: 'DELETE',
@@ -110,6 +110,17 @@ export function useChallenge(session) {
       }
     }
   }, [challenge?.id])
+
+  // Refetch when app comes back to foreground (handles missed realtime events)
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible' && challenge?.id) {
+        loadChallenge()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [challenge?.id, loadChallenge])
 
   // Create a new challenge
   const createChallenge = async ({ name1, email1, name2, email2 }) => {
