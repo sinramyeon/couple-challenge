@@ -127,9 +127,9 @@ export function useChallenge(session) {
     const { data, error: err } = await supabase
       .from('challenges')
       .insert({
-        email_a: email1,
+        email_a: email1.toLowerCase(),
         name_a: name1,
-        email_b: email2,
+        email_b: email2.toLowerCase(),
         name_b: name2,
         goal_a: '',
         goal_b: '',
@@ -163,14 +163,16 @@ export function useChallenge(session) {
       update[`completed_${mySide}_at`] = null
     }
 
-    const { error: err } = await supabase
+    const { data: updated, error: err } = await supabase
       .from('challenges')
       .update(update)
       .eq('id', challenge.id)
+      .select()
+      .maybeSingle()
 
-    if (err) {
-      // Revert on error
-      setError(err.message)
+    if (err || !updated) {
+      // Revert on error or silent RLS failure
+      if (err) setError(err.message)
       loadChallenge()
     }
   }
@@ -182,13 +184,15 @@ export function useChallenge(session) {
 
     setChallenge(prev => ({ ...prev, [goalKey]: newGoal }))
 
-    const { error: err } = await supabase
+    const { data: updated, error: err } = await supabase
       .from('challenges')
       .update({ [goalKey]: newGoal })
       .eq('id', challenge.id)
+      .select()
+      .maybeSingle()
 
-    if (err) {
-      setError(err.message)
+    if (err || !updated) {
+      if (err) setError(err.message)
       loadChallenge()
     }
   }
