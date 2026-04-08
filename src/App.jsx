@@ -726,6 +726,7 @@ export default function App() {
           onSelect={handleSkinChange}
           onClose={() => setShowSkinPicker(false)}
           lang={lang}
+          coupleLevel={getLevel(calculateCoupleXP(challenge.days_a, challenge.days_b) + (challenge.banked_xp || 0)).level}
         />
       )}
     </>

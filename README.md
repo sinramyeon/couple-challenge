@@ -8,7 +8,7 @@
 - 파트너와 실시간 진행 상황 공유 (Supabase Realtime)
 - 60가지 색연필 색상의 담곰 체크인 (클릭 시 1초 색칠 애니메이션)
 - 4종 스킨: 담곰, 울보 담곰, 부들 담곰, 치이카와
-- 커플 레벨 시스템 (XP 기반, 레벨업 시 스킨 선택 팝업)
+- 커플 레벨 시스템 (XP 기반, 레벨업 시 새 스킨 선택 가능)
 - 30일 완주 후 새 목표로 다시 시작 (레벨 유지) 또는 새 파트너와 시작 (레벨 초기화)
 - 연속 체크인 스트릭 & 마일스톤 토스트
 - 찔러보기 (Nudge) — 상대방에게 체크인 알림
@@ -29,15 +29,15 @@ XP 획득 방법:
 - 둘 다 같은 날 체크인: +10 XP
 - 마일스톤 (10,15,20,25,30일): +20 XP
 
-레벨:
-| Level | XP | 예상 시점 |
-|---|---|---|
-| Lv.1 | 0 | 시작 |
-| Lv.2 | 700 | ~1달 완주 |
-| Lv.3 | 1500 | ~2달 |
-| Lv.4 | 3000 | ~3-4달 |
+레벨 & 스킨:
+| Level | XP | 새 스킨 | 예상 시점 |
+|---|---|---|---|
+| Lv.1 | 0 | 담곰 (기본) | 시작 |
+| Lv.2 | 700 | 울보 담곰 | ~1달 완주 |
+| Lv.3 | 1500 | 부들 담곰 | ~2달 |
+| Lv.4 | 3000 | 치이카와 | ~3-4달 |
 
-스킨은 레벨과 무관하게 자유 선택 가능. 레벨업 시 스킨 선택 팝업이 자동으로 열림.
+레벨업 시 스킨 선택 팝업이 자동으로 열려서 새로 해금된 스킨을 고를 수 있음.
 
 - 1달 최대 커플 XP: ~1200 (30일 완벽 + 동시 체크인)
 - XP는 챌린지 재시작 시 `banked_xp`에 누적 보존
@@ -78,7 +78,7 @@ http://localhost:5173/?dev=true
 Supabase 없이 모든 기능 테스트 가능:
 - A/B 사이드 전환
 - 체크인 빠르게 채우기 (Fill 5~30)
-- 모든 스킨 자유 선택
+- 모든 스킨 레벨별 선택 테스트
 - Nudge 알림 테스트
 - XP/레벨 실시간 확인
 - 마일스톤/축하 애니메이션
@@ -121,16 +121,16 @@ src/
 │   ├── CoupleInteractions.jsx  # Nudge 버튼
 │   ├── EditableGoal.jsx        # 목표 편집
 │   ├── EncouragementBanner.jsx # 격려 배너
-│   ├── LevelSystem.jsx         # 커플 레벨 + XP 표시
+│   ├── LevelSystem.jsx         # 커플 레벨 + XP + 다음 스킨 표시
 │   ├── MilestoneToast.jsx      # 마일스톤 알림
 │   ├── PaperBackground.jsx     # 배경 텍스쳐
 │   ├── ProgressBar.jsx         # 진행 바
-│   ├── SkinPicker.jsx          # 스킨 선택 (자유 선택)
+│   ├── SkinPicker.jsx          # 스킨 선택 (레벨별 해금)
 │   └── WashiTape.jsx           # 장식 테이프
 ├── lib/
 │   ├── hooks.js                # useAuth, useChallenge, restartChallenge
 │   ├── i18n.js                 # 다국어 (ko/en 귀여운 말투)
-│   ├── skins.js                # 60색 팔레트, 스킨 목록
+│   ├── skins.js                # 60색 팔레트, 스킨 목록 + 해금 레벨
 │   └── supabase.js             # Supabase 클라이언트
 ├── App.jsx                     # 메인 앱
 ├── DevApp.jsx                  # Dev 테스트 모드 (전체 기능)
@@ -139,11 +139,11 @@ src/
 
 ## Skins
 
-| ID | 이미지 | 이름 |
-|---|---|---|
-| stripe | damgom.png | 담곰 |
-| simple | damgom_cry.png | 울보 담곰 |
-| shiver | damgom_cry_shiver.png | 부들 담곰 |
-| chiikawa | chiikawa.png | 치이카와 |
+| ID | 이미지 | 이름 | 해금 |
+|---|---|---|---|
+| stripe | damgom.png | 담곰 | Lv.1 |
+| simple | damgom_cry.png | 울보 담곰 | Lv.2 |
+| shiver | damgom_cry_shiver.png | 부들 담곰 | Lv.3 |
+| chiikawa | chiikawa.png | 치이카와 | Lv.4 |
 
-모든 스킨은 처음부터 자유 선택 가능. 레벨업 시 스킨 변경 팝업이 자동으로 열림.
+레벨업 시 스킨 선택 팝업이 자동으로 열림.

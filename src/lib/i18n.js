@@ -98,7 +98,7 @@ const translations = {
     celebClose: '계속 달려!!',
 
     skinPickerTitle: '챌린지 스킨 선택',
-    skinAll: '레벨업할 때 원하는 스킨을 골라봐요!',
+    skinLocked: '🔒 레벨업하면 새 스킨을 고를 수 있어요!',
     changeSkin: '스킨 변경',
 
     sendNudge: '찔러보기',
@@ -214,7 +214,7 @@ const translations = {
     celebClose: 'keep goin ro!!',
 
     skinPickerTitle: 'choose skins',
-    skinAll: 'pick your fav skin when you level up ro!',
+    skinLocked: '🔒 level up to pick new skins ro!',
     changeSkin: 'change skino',
 
     sendNudge: 'nudge ro',

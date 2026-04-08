@@ -116,11 +116,11 @@ export default function ChallengeCard({
 
       {/* Achievement badges removed */}
 
-      {/* Bear grid — now using SVG bears with skin support */}
+      {/* Bear grid — responsive */}
       <div style={{
         display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)',
-        gap: '4px 6px', justifyItems: 'center', marginBottom: 16,
-        padding: '12px 8px',
+        gap: '4px 0', justifyItems: 'center', marginBottom: 16,
+        padding: '12px 0', overflow: 'hidden',
       }}>
         {days.map((filled, i) => (
           <BearSVG
@@ -135,7 +135,7 @@ export default function ChallengeCard({
               }
               onToggle(i)
             }}
-            size={60}
+            size={50}
             disabled={!isOwner}
             t={t}
           />
