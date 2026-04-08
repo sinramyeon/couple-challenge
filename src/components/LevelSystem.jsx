@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { CRAYON_COLORS } from '../lib/skins'
 
 /*
-  LevelSystem — XP & levels with skin unlocks.
+  LevelSystem — XP & levels.
 
   XP earned by:
   - Each check-in: +10 XP
@@ -12,13 +12,14 @@ import { CRAYON_COLORS } from '../lib/skins'
   - Both check in same day: +10 XP
   - Milestone (10,15,20,25,30 days): +20 XP each
 
-  Levels & skin unlocks (max Lv.100):
+  Levels (max Lv.100):
   Max XP per 30-day challenge (couple, perfect): ~1200 XP
-  Lv.1 =    0 XP — 담곰 (default)
-  Lv.2 =  700 XP — 울보 담곰 unlock
-  Lv.3 = 1500 XP — 부들 담곰 unlock
-  Lv.4 = 3000 XP — 치이카와 unlock
+  Lv.1 =    0 XP
+  Lv.2 =  700 XP
+  Lv.3 = 1500 XP
+  Lv.4 = 3000 XP
   Lv.5+ = every 1000 XP after Lv.4
+  Skins are freely selectable at any level.
 */
 
 // Generate thresholds: Lv1=0, Lv2=700, Lv3=1500, Lv4=3000, then +1000 per level
@@ -121,14 +122,6 @@ export function XPPopup({ xpGained, show, t }) {
   )
 }
 
-// Skin names for level rewards
-const LEVEL_REWARDS = {
-  1: { ko: '담곰', en: 'Damgom' },
-  2: { ko: '울보 담곰', en: 'Cry Damgom' },
-  3: { ko: '부들 담곰', en: 'Shiver Damgom' },
-  4: { ko: '치이카와', en: 'Chiikawa' },
-}
-
 // ─── Couple Level Display (between cards) ───
 export default function CoupleLevelBar({ daysA, daysB, bankedXP = 0, t }) {
   const coupleXP = calculateCoupleXP(daysA, daysB) + bankedXP
@@ -136,7 +129,6 @@ export default function CoupleLevelBar({ daysA, daysB, bankedXP = 0, t }) {
   const progress = isMax ? 100 : Math.min((currentXP / nextXP) * 100, 100)
   const color = CRAYON_COLORS[(level * 5) % CRAYON_COLORS.length]
   const isKo = t.coupleLevel === '커플 레벨'
-  const nextReward = LEVEL_REWARDS[level + 1]
   const [animate, setAnimate] = useState(false)
   const prevXP = useRef(coupleXP)
 
@@ -212,24 +204,12 @@ export default function CoupleLevelBar({ daysA, daysB, bankedXP = 0, t }) {
         <span>{nextXP} {t.xpLabel}</span>
       </div>
 
-      {/* Next skin unlock */}
-      {nextReward && (
-        <div style={{
-          fontSize: 12, color: '#888', fontWeight: 700, marginTop: 8,
-          fontFamily: "'JejuGothic', sans-serif",
-          padding: '6px 12px',
-          border: '1px dashed #ddd',
-          background: '#fafafa',
-        }}>
-          🔓 Lv.{level + 1} → {isKo ? `${nextReward.ko} 해금` : `unlock ${nextReward.en} ro`}
-        </div>
-      )}
       {isMax && (
         <div style={{
           fontSize: 12, color: '#888', fontWeight: 700, marginTop: 8,
           fontFamily: "'JejuGothic', sans-serif",
         }}>
-          ✨ {isKo ? '모든 스킨 해금 완료!' : 'all skins unlocked ro!'}
+          ✨ {isKo ? '만렙 달성!!' : 'max level ro!!'}
         </div>
       )}
 

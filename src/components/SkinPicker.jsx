@@ -3,11 +3,10 @@ import { SKIN_LIST } from '../lib/skins'
 import BearSVG from './BearSVG'
 
 /*
-  Skin picker — shows skins with level-based unlock.
-  Locked skins show the required level.
+  Skin picker — all skins available, user picks freely.
 */
 
-export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupleLevel }) {
+export default function SkinPicker({ currentSkin, onSelect, onClose, lang }) {
   const [hoveredSkin, setHoveredSkin] = useState(null)
   const isKo = lang === 'ko'
 
@@ -49,25 +48,21 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
           {SKIN_LIST.map(skin => {
             const isActive = currentSkin === skin.id
             const isHovered = hoveredSkin === skin.id
-            const isLocked = coupleLevel < skin.unlockLevel
             return (
               <button
                 key={skin.id}
-                onClick={() => {
-                  if (!isLocked) { onSelect(skin.id); onClose() }
-                }}
+                onClick={() => { onSelect(skin.id); onClose() }}
                 onMouseEnter={() => setHoveredSkin(skin.id)}
                 onMouseLeave={() => setHoveredSkin(null)}
                 style={{
                   background: '#fff',
                   border: isActive ? '2.5px solid #222' : '1.5px solid #ddd',
                   padding: '16px 12px',
-                  cursor: isLocked ? 'not-allowed' : 'pointer',
+                  cursor: 'pointer',
                   transition: 'all 0.2s',
-                  transform: isHovered && !isLocked ? 'scale(1.03)' : 'scale(1)',
+                  transform: isHovered ? 'scale(1.03)' : 'scale(1)',
                   boxShadow: isActive ? '3px 3px 0 #222' : 'none',
                   position: 'relative',
-                  opacity: isLocked ? 0.5 : 1,
                 }}
               >
                 {/* Selected indicator */}
@@ -81,23 +76,10 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
                   }}>✓</div>
                 )}
 
-                {/* Lock overlay */}
-                {isLocked && (
-                  <div style={{
-                    position: 'absolute', top: 8, right: 8,
-                    background: '#222', color: '#fff',
-                    padding: '2px 8px', fontSize: 11, fontWeight: 700,
-                    fontFamily: "'JejuGothic', sans-serif",
-                  }}>
-                    🔒 Lv.{skin.unlockLevel}
-                  </div>
-                )}
-
                 {/* Bear preview grid */}
                 <div style={{
                   display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
                   gap: 2, justifyItems: 'center', marginBottom: 10,
-                  filter: isLocked ? 'grayscale(100%)' : 'none',
                 }}>
                   {[0, 1, 2, 3, 4, 5].map(i => (
                     <BearSVG
@@ -114,23 +96,12 @@ export default function SkinPicker({ currentSkin, onSelect, onClose, lang, coupl
 
                 <div style={{
                   fontSize: 15, fontWeight: 700,
-                  color: isLocked ? '#aaa' : '#222',
+                  color: '#222',
                   fontFamily: "'JejuGothic', sans-serif",
                   textAlign: 'center',
                 }}>
                   {isKo ? skin.nameKo : skin.nameEn}
                 </div>
-                {isLocked && (
-                  <div style={{
-                    fontSize: 11, color: '#999', marginTop: 4,
-                    fontFamily: "'JejuGothic', sans-serif",
-                    textAlign: 'center',
-                  }}>
-                    {isKo
-                      ? `커플 레벨 ${skin.unlockLevel} 달성 시 해금`
-                      : `unlock at couple Lv.${skin.unlockLevel}o`}
-                  </div>
-                )}
               </button>
             )
           })}

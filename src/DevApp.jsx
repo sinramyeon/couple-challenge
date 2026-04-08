@@ -148,7 +148,7 @@ function DevPanel({ challenge, mySide, setMySide, fillDays, resetAll, skinId, se
       {/* Level thresholds */}
       <div style={{ marginTop: 10, fontSize: 11, color: '#666' }}>
         Lv.1=0 → Lv.2=700 → Lv.3=1500 → Lv.4=3000 XP
-        {' | '}Skins: {SKIN_LIST.map(s => `${s.id}(Lv.${s.unlockLevel})`).join(', ')}
+        {' | '}Skins: {SKIN_LIST.map(s => s.id).join(', ')}
       </div>
     </div>
   )
@@ -374,14 +374,12 @@ export default function DevApp() {
               All Skins Preview (current level: {coupleLevel})
             </h3>
             <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-              {SKIN_LIST.map(skin => {
-                const locked = coupleLevel < skin.unlockLevel
-                return (
+              {SKIN_LIST.map(skin => (
                   <div key={skin.id} style={{
-                    textAlign: 'center', opacity: locked ? 0.4 : 1,
+                    textAlign: 'center',
                     border: skinId === skin.id ? '2px solid #222' : '1px solid #ddd',
-                    padding: 12, cursor: locked ? 'not-allowed' : 'pointer',
-                  }} onClick={() => !locked && setSkinId(skin.id)}>
+                    padding: 12, cursor: 'pointer',
+                  }} onClick={() => setSkinId(skin.id)}>
                     <div style={{ display: 'flex', gap: 4, justifyContent: 'center', marginBottom: 8 }}>
                       {[0, 1, 2].map(i => (
                         <BearSVG key={i} index={i} filled={true} onClick={() => {}} size={40} disabled skinId={skin.id} />
@@ -389,11 +387,9 @@ export default function DevApp() {
                     </div>
                     <div style={{ fontSize: 13, fontWeight: 700, fontFamily: "'JejuGothic', sans-serif" }}>
                       {lang === 'ko' ? skin.nameKo : skin.nameEn}
-                      {locked && ` 🔒 Lv.${skin.unlockLevel}`}
                     </div>
                   </div>
-                )
-              })}
+              ))}
             </div>
           </div>
         </div>
@@ -405,7 +401,6 @@ export default function DevApp() {
           onSelect={setSkinId}
           onClose={() => setShowSkinPicker(false)}
           lang={lang}
-          coupleLevel={999}
         />
       )}
 
